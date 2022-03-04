@@ -17,6 +17,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [LoginController::class, 'authenticate']);
 
+Route::middleware('auth:sanctum')->get('/test', function (Request $request) {
+   return response()->json([
+       'message' => 'You are logged.',
+       'admin' => \Illuminate\Support\Facades\Auth::user()->tokenCan('admin'),
+       'client' => \Illuminate\Support\Facades\Auth::user()->tokenCan('client')
+   ]);
+});
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
