@@ -23,9 +23,16 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
-            return response()->json(Auth::user());
+            if(Auth::user()->role === 1) {
+                return response()->json([
+                    'token' => Auth::user()->createToken('auth_token', ['admin'])->plainTextToken
+                ]);
+            }
+            else {
+                return response()->json([
+                    'token' => Auth::user()->createToken('auth_token', ['client'])->plainTextToken
+                ]);
+            }
         }
 
         return response('Bad credentials', 401);
