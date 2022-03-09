@@ -14,7 +14,7 @@ For running this project locally you need to have installed Docker.
 
 ## Database seeding
 
-1. Admin login: sail artisan db:seed --class=AdminLoginSeeder
+1. Admin login: sail artisan db:seed
 
 ## Login credentials
 

@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class User extends Model
+class User extends Authenticatable
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -15,7 +18,11 @@ class User extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name'
+        'email',
+        'password',
+        'role',
+        'staff_id',
+        'client_id'
     ];
 
     /**
@@ -24,7 +31,8 @@ class User extends Model
      * @var array<int, string>
      */
     protected $hidden = [
-
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -33,6 +41,16 @@ class User extends Model
      * @var array<string, string>
      */
     protected $casts = [
-
+        'email_verified_at' => 'datetime',
     ];
+
+    public function staff(): BelongsTo
+    {
+        return $this->belongsTo(Staff::class);
+    }
+
+    public function client(): BelongsTo
+    {
+        return $this->belongsTo(Client::class);
+    }
 }
