@@ -25,14 +25,10 @@ Route::middleware('localization')->middleware('auth:sanctum')->group(function ()
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 
-Route::middleware('auth:sanctum')->get('/test', function (Request $request) {
-   return response()->json([
-       'message' => 'You are logged.',
-       'admin' => \Illuminate\Support\Facades\Auth::user()->tokenCan('admin'),
-       'client' => \Illuminate\Support\Facades\Auth::user()->tokenCan('client')
-   ]);
+Route::middleware('localization')->middleware(['auth:sanctum', 'ability:admin'])->group(function () {
+
 });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {
+
 });
