@@ -15,13 +15,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/login', [LoginController::class, 'login'])->name('login');
+Route::middleware('localization')->group(function () {
+    Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
+});
 
-Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
+Route::middleware('localization')->middleware('auth:sanctum')->group(function () {
+    Route::get('/info', [LoginController::class, 'info'])->name('info_about_user');
 
-Route::middleware('auth:sanctum')->get('/info', [LoginController::class, 'info'])->name('info_about_user');
-
-Route::middleware('auth:sanctum')->get('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+});
 
 Route::middleware('auth:sanctum')->get('/test', function (Request $request) {
    return response()->json([

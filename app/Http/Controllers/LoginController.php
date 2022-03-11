@@ -36,7 +36,7 @@ class LoginController extends Controller
             }
         }
 
-        return response(['message' => 'Bad credentials'], 401);
+        return response(['message' => trans('messages.badCredentials')], 401);
     }
 
     /**
