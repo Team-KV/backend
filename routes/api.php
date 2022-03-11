@@ -15,7 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/login', [LoginController::class, 'authenticate']);
+Route::get('/login', [LoginController::class, 'login'])->name('login');
+
+Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
+
+Route::middleware('auth:sanctum')->get('/info', [LoginController::class, 'info'])->name('info_about_user');
+
+Route::middleware('auth:sanctum')->get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::middleware('auth:sanctum')->get('/test', function (Request $request) {
    return response()->json([
