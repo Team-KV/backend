@@ -26,17 +26,17 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             if(Auth::user()->role === 1) {
                 return response()->json([
-                    'token' => Auth::user()->createToken('auth_token', ['admin'])->plainTextToken
+                    'Token' => Auth::user()->createToken('auth_token', ['admin'])->plainTextToken
                 ]);
             }
             else {
                 return response()->json([
-                    'token' => Auth::user()->createToken('auth_token', ['client'])->plainTextToken
+                    'Token' => Auth::user()->createToken('auth_token', ['client'])->plainTextToken
                 ]);
             }
         }
 
-        return response(['code' => 401, 'message' => 'Bad credentials'], 401);
+        return response(['message' => 'Bad credentials'], 401);
     }
 
     /**
