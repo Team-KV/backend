@@ -19,6 +19,7 @@ For running this project locally you need to have installed Docker.
 ## Login credentials
 
 Admin login: admin@test.com, admin
+Client login: client@test.com, client
 
 ## Usage
 

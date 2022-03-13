@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,7 +27,7 @@ Route::middleware('localization')->middleware('auth:sanctum')->group(function ()
 });
 
 Route::middleware('localization')->middleware(['auth:sanctum', 'ability:admin'])->group(function () {
-
+    Route::get('/client', [ClientController::class, 'list'])->name('collection_of_clients');
 });
 
 Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {
