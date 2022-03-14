@@ -44,6 +44,22 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Returns user by email
+     *
+     * @param String|null $email
+     * @return User|null
+     */
+    public static function getUserByEmail(String|null $email): User|null
+    {
+        if($email != null) {
+            return self::all()->where('email', $email)->first();
+        }
+        else {
+            return null;
+        }
+    }
+
     public function staff(): BelongsTo
     {
         return $this->belongsTo(Staff::class, 'staff_id');

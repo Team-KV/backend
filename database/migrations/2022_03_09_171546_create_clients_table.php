@@ -21,7 +21,7 @@ return new class extends Migration
             $table->tinyInteger("sex")->nullable();
             $table->float("height")->nullable();
             $table->float("weight")->nullable();
-            $table->string("personal_information_number")->nullable();
+            $table->string("personal_information_number")->unique()->nullable();
             $table->integer("insurance_company")->nullable();
             $table->string("phone");
             $table->string("street")->nullable();
