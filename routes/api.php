@@ -30,6 +30,8 @@ Route::middleware('localization')->middleware(['auth:sanctum', 'ability:admin'])
     Route::get('/client', [ClientController::class, 'list'])->name('collection_of_clients');
 
     Route::post('/client', [ClientController::class, 'create'])->name('create_client');
+
+    Route::get('/client/{id}', [ClientController::class, 'detail'])->name('detail_of_client');
 });
 
 Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {
