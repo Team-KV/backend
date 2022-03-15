@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\QueryException;
 use phpDocumentor\Reflection\Types\Integer;
 
 class Client extends Model
@@ -71,6 +72,23 @@ class Client extends Model
         }
         else {
             return null;
+        }
+    }
+
+    /**
+     * Updates client by ID
+     *
+     * @param $id
+     * @param $params
+     * @return bool
+     */
+    public static function updateClientByID($id, $params): bool
+    {
+        try {
+            self::all()->where('id', $id)->update($params);
+            return true;
+        } catch(QueryException) {
+            return false;
         }
     }
 

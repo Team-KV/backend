@@ -94,4 +94,43 @@ class ClientController extends Controller
     {
         return response()->json(['Client' => Client::getClientByID($id)]);
     }
+
+    /**
+     * Updates client by ID
+     *
+     * @param $id
+     * @param Request $request
+     * @return JsonResponse|Response
+     */
+    public function update($id, Request $request): JsonResponse|Response
+    {
+        $params = $request->validate([
+            'first_name' => ['required', 'string'],
+            'last_name' => ['required', 'string'],
+            'date_born' => ['required', 'date'],
+            'sex' => ['numeric'],
+            'height' => ['numeric'],
+            'weight' => ['numeric'],
+            'personal_information_number' => [],
+            'insurance_company' => ['numeric'],
+            'phone' => ['required', 'max:16'],
+            'street' => [],
+            'city' => [],
+            'postal_code' => ['max:6'],
+            'sport' => [],
+            'past_illnesses' => [],
+            'injuries_suffered' => [],
+            'diag' => [],
+            'note' => []
+        ]);
+
+        //TODO: Personal information number verification
+
+        if(Client::updateClientByID($id, $params)) {
+            return response()->json(['Client' => Client::getClientByID($id)]);
+        }
+        else {
+            return response(['message' => trans('messages.clientUpdateError')], 409);
+        }
+    }
 }
