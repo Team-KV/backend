@@ -104,6 +104,10 @@ class ClientController extends Controller
      */
     public function update($id, Request $request): JsonResponse|Response
     {
+        if(Client::getClientByID($id) == null) {
+            return response(['message' => trans('messages.clientDoesntExistsError')], 404);
+        }
+
         $params = $request->validate([
             'first_name' => ['required', 'string'],
             'last_name' => ['required', 'string'],
@@ -132,5 +136,17 @@ class ClientController extends Controller
         else {
             return response(['message' => trans('messages.clientUpdateError')], 409);
         }
+    }
+
+    public function delete($id): Response
+    {
+        if(Client::getClientByID($id) == null) {
+            return response(['message' => trans('messages.clientDoesntExistsError')], 404);
+        }
+        //TODO: Delete client's objects (events, attachments, ...)
+
+        Client::deleteClientByID($id);
+
+        return response('', 204);
     }
 }

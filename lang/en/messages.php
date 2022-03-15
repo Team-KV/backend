@@ -4,6 +4,7 @@ return [
     'badCredentials' => 'Bad credentials.',
     'clientCreateError' => 'Client cannot be created. Please try it again.',
     'clientAlreadyExistsError' => 'Client already exists.',
+    'clientDoesntExistsError' => 'Client doesn\'t exists.',
     'clientUpdateError' => 'Client cannot be updated. Please try it again.',
     'userCreateError' => 'User for client cannot be created.'
 ];

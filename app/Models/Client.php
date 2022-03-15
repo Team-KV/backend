@@ -92,6 +92,17 @@ class Client extends Model
         }
     }
 
+    /**
+     * Deletes client by ID
+     *
+     * @param $id
+     * @return void
+     */
+    public static function deleteClientByID($id): void
+    {
+        self::all()->where('id', $id)->first()->delete();
+    }
+
     public function user(): HasOne
     {
         return $this->hasOne(User::class);
