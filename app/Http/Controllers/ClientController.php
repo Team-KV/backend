@@ -42,6 +42,7 @@ class ClientController extends Controller
             'personal_information_number' => [],
             'insurance_company' => ['numeric'],
             'phone' => ['required', 'max:16'],
+            'contact_email' => ['email'],
             'street' => [],
             'city' => [],
             'postal_code' => ['max:6'],
@@ -49,11 +50,10 @@ class ClientController extends Controller
             'past_illnesses' => [],
             'injuries_suffered' => [],
             'diag' => [],
-            'note' => [],
-            'email' => ['email']
+            'note' => []
         ]);
 
-        if(Client::getClientByPIN($params['personal_information_number']) != null || User::getUserByEmail($params['email']) != null) {
+        if(Client::getClientByPIN($params['personal_information_number']) != null || User::getUserByEmail($params['contact_email']) != null) {
             return response(['message' => trans('messages.clientAlreadyExistsError')], 409);
         }
 
@@ -65,9 +65,9 @@ class ClientController extends Controller
             return response(['message' => trans('messages.clientCreateError')], 409);
         }
 
-        if(isset($params['email']) && $params['email'] != "") {
+        if(isset($params['contact_email']) && $params['contact_email'] != "") {
             $password = Str::random(8);
-            $userParams = ['email' => $params['email'],
+            $userParams = ['email' => $params['contact_email'],
                 'password' => Hash::make($password),
                 'role' => 0,
                 'staff_id' => null,
@@ -118,6 +118,7 @@ class ClientController extends Controller
             'personal_information_number' => [],
             'insurance_company' => ['numeric'],
             'phone' => ['required', 'max:16'],
+            'contact_email' => ['email'],
             'street' => [],
             'city' => [],
             'postal_code' => ['max:6'],

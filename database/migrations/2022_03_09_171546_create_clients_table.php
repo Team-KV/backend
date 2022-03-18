@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string("personal_information_number")->unique()->nullable();
             $table->integer("insurance_company")->nullable();
             $table->string("phone");
+            $table->string('contact_email')->nullable();
             $table->string("street")->nullable();
             $table->string("city")->nullable();
             $table->string("postal_code")->nullable();
