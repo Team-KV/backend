@@ -23,7 +23,7 @@ return new class extends Migration
             $table->float("weight")->nullable();
             $table->string("personal_information_number")->unique()->nullable();
             $table->integer("insurance_company")->nullable();
-            $table->string("phone");
+            $table->string("phone")->nullable();
             $table->string('contact_email')->nullable();
             $table->string("street")->nullable();
             $table->string("city")->nullable();
@@ -33,6 +33,7 @@ return new class extends Migration
             $table->string("injuries_suffered")->nullable();
             $table->text("note")->nullable();
             $table->text("diag")->nullable();
+            $table->foreignId('client_id')->nullable();
             $table->timestamps();
         });
     }

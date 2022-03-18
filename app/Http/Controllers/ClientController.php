@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use phpDocumentor\Reflection\Types\Integer;
 
 class ClientController extends Controller
 {
@@ -41,7 +40,7 @@ class ClientController extends Controller
             'weight' => ['numeric'],
             'personal_information_number' => [],
             'insurance_company' => ['numeric'],
-            'phone' => ['required', 'max:16'],
+            'phone' => ['max:16'],
             'contact_email' => ['email'],
             'street' => [],
             'city' => [],
@@ -50,7 +49,8 @@ class ClientController extends Controller
             'past_illnesses' => [],
             'injuries_suffered' => [],
             'diag' => [],
-            'note' => []
+            'note' => [],
+            'client_id' => []
         ]);
 
         if(Client::getClientByPIN($params['personal_information_number']) != null || User::getUserByEmail($params['contact_email']) != null) {
@@ -117,7 +117,7 @@ class ClientController extends Controller
             'weight' => ['numeric'],
             'personal_information_number' => [],
             'insurance_company' => ['numeric'],
-            'phone' => ['required', 'max:16'],
+            'phone' => ['max:16'],
             'contact_email' => ['email'],
             'street' => [],
             'city' => [],
@@ -126,7 +126,8 @@ class ClientController extends Controller
             'past_illnesses' => [],
             'injuries_suffered' => [],
             'diag' => [],
-            'note' => []
+            'note' => [],
+            'client_id' => []
         ]);
 
         //TODO: Personal information number verification

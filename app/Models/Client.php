@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\QueryException;
 use phpDocumentor\Reflection\Types\Integer;
@@ -56,7 +58,7 @@ class Client extends Model
      */
     public static function getClientByID($id): Model|null
     {
-        return self::with('user')->where('id', $id)->first();
+        return self::with('user')->with('parent')->with('children')->where('id', $id)->first();
     }
 
     /**
@@ -101,6 +103,16 @@ class Client extends Model
     public static function deleteClientByID($id): void
     {
         self::all()->where('id', $id)->first()->delete();
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Client::class, 'client_id');
+    }
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(Client::class, 'client_id');
     }
 
     public function user(): HasOne
