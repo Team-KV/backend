@@ -149,4 +149,24 @@ class ClientController extends Controller
 
         return response('', 204);
     }
+
+    public function createUser($id): Response|JsonResponse
+    {
+        $client = Client::getClientByID($id);
+        if($client != null) {
+            if($client->contact_email != '' && $client->contact_email != null) {
+                if(!User::createUser($client->contact_email, $client->id)) {
+                    return response('', 409)->json(['message' => trans('messages.userCreateError'), 'Client' => $client]);
+                }
+            }
+            else {
+                return response(['message' => trans('messages.clientEmailError')], 409);
+            }
+        }
+        else {
+            return response(['message' => trans('messages.clientDoesntExistsError')], 404);
+        }
+
+        return response()->json(['Client' => Client::getClientWithAllByID($id)]);
+    }
 }

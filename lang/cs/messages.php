@@ -6,6 +6,7 @@ return [
     'clientAlreadyExistsError' => 'Klient již existuje.',
     'clientDoesntExistsError' => 'Klient neexistuje.',
     'clientPINError' => 'Rodné číslo nené validní.',
+    'clientEmailError' => 'Email klienta není nastaven.',
     'clientUpdateError' => 'Klienta se nepodařilo upravit. Zkuste to prosím znovu.',
     'userCreateError' => 'Uživatele pro klienta se nepodařilo vytvořit.'
 ];

@@ -29,6 +29,7 @@ class Client extends Model
         'height',
         'weight',
         'phone',
+        'contact_email',
         'street',
         'city',
         'postal_code',

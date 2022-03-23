@@ -6,6 +6,7 @@ return [
     'clientAlreadyExistsError' => 'Client already exists.',
     'clientDoesntExistsError' => 'Client doesn\'t exists.',
     'clientPINError' => 'Personal information number is not valid.',
+    'clientEmailError' => 'Client\'s email is not set.',
     'clientUpdateError' => 'Client cannot be updated. Please try it again.',
     'userCreateError' => 'User for client cannot be created.'
 ];

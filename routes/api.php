@@ -36,6 +36,8 @@ Route::middleware('localization')->middleware(['auth:sanctum', 'ability:admin'])
     Route::put('/client/{id}', [ClientController::class, 'update'])->name('update_client');
 
     Route::delete('/client/{id}', [ClientController::class, 'delete'])->name('delete_client');
+
+    Route::post('/client/{id}/user', [ClientController::class, 'createUser'])->name('create_client_user');
 });
 
 Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {
