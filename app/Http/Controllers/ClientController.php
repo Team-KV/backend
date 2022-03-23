@@ -33,23 +33,23 @@ class ClientController extends Controller
             'first_name' => ['required', 'string'],
             'last_name' => ['required', 'string'],
             'date_born' => ['required', 'date'],
-            'sex' => ['numeric'],
-            'height' => ['numeric'],
-            'weight' => ['numeric'],
-            'personal_information_number' => [],
-            'insurance_company' => ['numeric'],
-            'phone' => ['max:16'],
-            'contact_email' => ['email'],
-            'street' => [],
-            'city' => [],
-            'postal_code' => ['max:6'],
-            'sport' => [],
-            'past_illnesses' => [],
-            'injuries_suffered' => [],
-            'diag' => [],
-            'note' => [],
-            'no_czech' => [],
-            'client_id' => []
+            'sex' => ['numeric', 'nullable'],
+            'height' => ['numeric', 'nullable'],
+            'weight' => ['numeric', 'nullable'],
+            'personal_information_number' => ['string', 'nullable'],
+            'insurance_company' => ['numeric', 'nullable'],
+            'phone' => ['string', 'max:16', 'nullable'],
+            'contact_email' => ['string', 'email', 'nullable'],
+            'street' => ['string', 'nullable'],
+            'city' => ['string', 'nullable'],
+            'postal_code' => ['string', 'max:6', 'nullable'],
+            'sport' => ['string', 'nullable'],
+            'past_illnesses' => ['string', 'nullable'],
+            'injuries_suffered' => ['string', 'nullable'],
+            'diag' => ['string', 'nullable'],
+            'note' => ['string', 'nullable'],
+            'no_czech' => ['boolean'],
+            'client_id' => ['integer', 'nullable']
         ]);
 
         if(Client::getClientByPIN($params['personal_information_number']) != null || User::getUserByEmail($params['contact_email']) != null) {
@@ -64,7 +64,7 @@ class ClientController extends Controller
 
         try {
             $client = Client::create($params);
-        } catch (QueryException) {
+        } catch (QueryException $exception) {
             return response(['message' => trans('messages.clientCreateError')], 409);
         }
 
@@ -105,23 +105,23 @@ class ClientController extends Controller
             'first_name' => ['required', 'string'],
             'last_name' => ['required', 'string'],
             'date_born' => ['required', 'date'],
-            'sex' => ['numeric'],
-            'height' => ['numeric'],
-            'weight' => ['numeric'],
-            'personal_information_number' => [],
-            'insurance_company' => ['numeric'],
-            'phone' => ['max:16'],
-            'contact_email' => ['email'],
-            'street' => [],
-            'city' => [],
-            'postal_code' => ['max:6'],
-            'sport' => [],
-            'past_illnesses' => [],
-            'injuries_suffered' => [],
-            'diag' => [],
-            'note' => [],
-            'no_czech' => [],
-            'client_id' => []
+            'sex' => ['numeric', 'nullable'],
+            'height' => ['numeric', 'nullable'],
+            'weight' => ['numeric', 'nullable'],
+            'personal_information_number' => ['string', 'nullable'],
+            'insurance_company' => ['numeric', 'nullable'],
+            'phone' => ['string', 'max:16', 'nullable'],
+            'contact_email' => ['string', 'email', 'nullable'],
+            'street' => ['string', 'nullable'],
+            'city' => ['string', 'nullable'],
+            'postal_code' => ['string', 'max:6', 'nullable'],
+            'sport' => ['string', 'nullable'],
+            'past_illnesses' => ['string', 'nullable'],
+            'injuries_suffered' => ['string', 'nullable'],
+            'diag' => ['string', 'nullable'],
+            'note' => ['string', 'nullable'],
+            'no_czech' => ['boolean'],
+            'client_id' => ['integer', 'nullable']
         ]);
 
         if($params['no_czech'] != true && $params['personal_information_number'] != null && $params['personal_information_number'] != '') {

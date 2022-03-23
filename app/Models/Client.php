@@ -91,7 +91,7 @@ class Client extends Model
     public static function updateClientByID($id, $params): bool
     {
         try {
-            self::all()->where('id', $id)->update($params);
+            self::all()->where('id', $id)->first()->update($params);
             return true;
         } catch(QueryException) {
             return false;
