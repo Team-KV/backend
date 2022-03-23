@@ -47,7 +47,7 @@ class LoginController extends Controller
     public function info(): JsonResponse
     {
         return response()->json([
-            'User' => User::with('staff')->with('client')->find(Auth::id())
+            'User' => User::getUserByID(Auth::id())
         ]);
     }
 

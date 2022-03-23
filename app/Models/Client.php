@@ -57,6 +57,11 @@ class Client extends Model
      */
     public static function getClientByID($id): Model|null
     {
+        return self::all()->where('id', $id)->first();
+    }
+
+    public static function getClientWithAllByID($id): Model|null
+    {
         return self::with('user')->with('parent')->with('children')->where('id', $id)->first();
     }
 

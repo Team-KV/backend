@@ -85,7 +85,7 @@ class ClientController extends Controller
      */
     public function detail($id): JsonResponse
     {
-        return response()->json(['Client' => Client::getClientByID($id)]);
+        return response()->json(['Client' => Client::getClientWithAllByID($id)]);
     }
 
     /**
@@ -131,7 +131,7 @@ class ClientController extends Controller
         }
 
         if(Client::updateClientByID($id, $params)) {
-            return response()->json(['Client' => Client::getClientByID($id)]);
+            return response()->json(['Client' => Client::getClientWithAllByID($id)]);
         }
         else {
             return response(['message' => trans('messages.clientUpdateError')], 409);

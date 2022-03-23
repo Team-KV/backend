@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -46,6 +47,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Returns user by ID
+     *
+     * @param $id
+     * @return Model|null
+     */
+    public static function getUserByID($id): Model|null
+    {
+        return self::with('staff')->with('client')->where('id', $id)->first();
+    }
 
     /**
      * Returns user by email
