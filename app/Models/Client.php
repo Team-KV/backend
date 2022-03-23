@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\QueryException;
-use phpDocumentor\Reflection\Types\Integer;
 
 class Client extends Model
 {
@@ -103,6 +102,56 @@ class Client extends Model
     public static function deleteClientByID($id): void
     {
         self::all()->where('id', $id)->first()->delete();
+    }
+
+    /**
+     * Verify if PIN is valid for Czech republic
+     *
+     * @param String $pin
+     * @return bool
+     */
+    public static function verifyPIN(String $pin): bool
+    {
+        //Format check
+        if(!preg_match('#^\s*(\d\d)(\d\d)(\d\d)(\d\d\d)(\d?)\s*$#', $pin, $matches)) {
+            return false;
+        }
+
+        list(, $year, $month, $day, $ext, $c) = $matches;
+
+        //until 1954 there were only 9 digit PINs, can't check
+        if($c === '') {
+            return $year < 54;
+        }
+
+        //Control digit check
+        $mod = ($year.$month.$day.$ext) % 11;
+        if($mod === 10) {
+            $mod = 0;
+        }
+        if($mod !== (int)$c) {
+            return false;
+        }
+
+        //Set right year
+        $year += $year < 54 ? 2000 : 1900;
+
+        //For women, it can be added to the month 20, 50 or 70
+        if($month > 70 && $year > 2003) {
+            $month -= 70;
+        }
+        else if($month > 50) {
+            $month -= 50;
+        }
+        else if($month > 20 && $year > 2003) {
+            $month -= 20;
+        }
+
+        if(!checkdate($month, $day, $year)) {
+            return false;
+        }
+
+        return true;
     }
 
     public function parent(): BelongsTo

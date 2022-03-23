@@ -50,6 +50,7 @@ class ClientController extends Controller
             'injuries_suffered' => [],
             'diag' => [],
             'note' => [],
+            'no_czech' => [],
             'client_id' => []
         ]);
 
@@ -57,7 +58,11 @@ class ClientController extends Controller
             return response(['message' => trans('messages.clientAlreadyExistsError')], 409);
         }
 
-        //TODO: Personal information number verification
+        if($params['no_czech'] != true && $params['personal_information_number'] != null && $params['personal_information_number'] != '') {
+            if(!Client::verifyPIN($params['personal_information_number'])) {
+                return response(['message' => trans('messages.clientPINError')], 409);
+            }
+        }
 
         try {
             $client = Client::create($params);
@@ -127,10 +132,15 @@ class ClientController extends Controller
             'injuries_suffered' => [],
             'diag' => [],
             'note' => [],
+            'no_czech' => [],
             'client_id' => []
         ]);
 
-        //TODO: Personal information number verification
+        if($params['no_czech'] != true && $params['personal_information_number'] != null && $params['personal_information_number'] != '') {
+            if(!Client::verifyPIN($params['personal_information_number'])) {
+                return response(['message' => trans('messages.clientPINError')], 409);
+            }
+        }
 
         if(Client::updateClientByID($id, $params)) {
             return response()->json(['Client' => Client::getClientByID($id)]);
