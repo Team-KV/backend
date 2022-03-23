@@ -8,8 +8,6 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class ClientController extends Controller
 {
@@ -70,20 +68,10 @@ class ClientController extends Controller
             return response(['message' => trans('messages.clientCreateError')], 409);
         }
 
-        if(isset($params['contact_email']) && $params['contact_email'] != "") {
-            $password = Str::random(8);
-            $userParams = ['email' => $params['contact_email'],
-                'password' => Hash::make($password),
-                'role' => 0,
-                'staff_id' => null,
-                'client_id' => $client->id];
-            try {
-                User::create($userParams);
-            } catch(QueryException) {
+        if(isset($params['contact_email']) && $params['contact_email'] != "" && $params['contact_email'] != null) {
+            if(!User::createUser($params['contact_email'], $client->id)) {
                 return response('', 409)->json(['message' => trans('messages.userCreateError'), 'Client' => $client]);
             }
-
-            //TODO: Mail with password
         }
 
         return response()->json(['Client' => $client]);
