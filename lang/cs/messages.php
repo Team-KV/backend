@@ -8,5 +8,9 @@ return [
     'clientPINError' => 'Rodné číslo nené validní.',
     'clientEmailError' => 'Email klienta není nastaven.',
     'clientUpdateError' => 'Klienta se nepodařilo upravit. Zkuste to prosím znovu.',
-    'userCreateError' => 'Uživatele pro klienta se nepodařilo vytvořit.'
+    'userCreateError' => 'Uživatele pro klienta se nepodařilo vytvořit.',
+    'eventTypeCreateError' => 'Typ akce nelze vytvořit.',
+    'eventTypeUpdateError' => 'Typ akce nelze aktulizovat.',
+    'eventTypeAlreadyExistsError' => 'Typ akce již existuje.',
+    'eventTypeDoesntExistError' => 'Typ akce neexistuje.'
 ];

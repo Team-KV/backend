@@ -64,7 +64,7 @@ class ClientController extends Controller
 
         try {
             $client = Client::create($params);
-        } catch (QueryException $exception) {
+        } catch (QueryException) {
             return response(['message' => trans('messages.clientCreateError')], 409);
         }
 

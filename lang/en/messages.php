@@ -4,9 +4,13 @@ return [
     'badCredentials' => 'Bad credentials.',
     'clientCreateError' => 'Client cannot be created. Please try it again.',
     'clientAlreadyExistsError' => 'Client already exists.',
-    'clientDoesntExistsError' => 'Client doesn\'t exists.',
+    'clientDoesntExistsError' => 'Client doesn\'t exist.',
     'clientPINError' => 'Personal information number is not valid.',
     'clientEmailError' => 'Client\'s email is not set.',
     'clientUpdateError' => 'Client cannot be updated. Please try it again.',
-    'userCreateError' => 'User for client cannot be created.'
+    'userCreateError' => 'User for client cannot be created.',
+    'eventTypeCreateError' => 'Event type cannot be created.',
+    'eventTypeUpdateError' => 'Event type cannot be updated.',
+    'eventTypeAlreadyExistsError' => 'Event type already exists.',
+    'eventTypeDoesntExistError' => 'Event type doesn\'t exist.'
 ];

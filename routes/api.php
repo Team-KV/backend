@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\EventTypeController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +39,17 @@ Route::middleware('localization')->middleware(['auth:sanctum', 'ability:admin'])
     Route::delete('/client/{id}', [ClientController::class, 'delete'])->name('delete_client');
 
     Route::post('/client/{id}/user', [ClientController::class, 'createUser'])->name('create_client_user');
+
+
+    Route::get('/event-type', [EventTypeController::class, 'list'])->name('collection_of_event_types');
+
+    Route::post('/event-type', [EventTypeController::class, 'create'])->name('create_event_type');
+
+    Route::get('/event-type/{id}', [EventTypeController::class, 'detail'])->name('detail_of_event_type');
+
+    Route::put('/event-type/{id}', [EventTypeController::class, 'update'])->name('update_event_type');
+
+    Route::delete('/event-type/{id}', [EventTypeController::class, 'delete'])->name('delete_event_type');
 });
 
 Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {
