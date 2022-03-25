@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\QueryException;
 
 class EventType extends Model
@@ -67,5 +68,10 @@ class EventType extends Model
         } catch(QueryException) {
             return false;
         }
+    }
+
+    public function event(): HasMany
+    {
+        return $this->hasMany(Event::class);
     }
 }

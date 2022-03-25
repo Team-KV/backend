@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventTypeController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Http\Request;
@@ -50,6 +51,8 @@ Route::middleware('localization')->middleware(['auth:sanctum', 'ability:admin'])
     Route::put('/event-type/{id}', [EventTypeController::class, 'update'])->name('update_event_type');
 
     Route::delete('/event-type/{id}', [EventTypeController::class, 'delete'])->name('delete_event_type');
+
+    Route::get('/event', [EventController::class, 'list'])->name('collection_of_events');
 });
 
 Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {
