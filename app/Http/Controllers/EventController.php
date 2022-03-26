@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class EventController extends Controller
 {
@@ -34,7 +35,13 @@ class EventController extends Controller
         }
     }
 
-    public function create(Request $request)
+    /**
+     * Returns response with created event
+     *
+     * @param Request $request
+     * @return Response|JsonResponse
+     */
+    public function create(Request $request): Response|JsonResponse
     {
         $params = $request->validate([
             'name' => ['required', 'string'],
@@ -64,5 +71,16 @@ class EventController extends Controller
         }
 
         return response()->json(['Event' => $event]);
+    }
+
+    /**
+     * Returns response with event by ID
+     *
+     * @param $id
+     * @return JsonResponse
+     */
+    public function detail($id): JsonResponse
+    {
+        return response()->json(['Event' => Event::getEventWithAllByID($id)]);
     }
 }

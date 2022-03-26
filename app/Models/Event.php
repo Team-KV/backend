@@ -28,6 +28,21 @@ class Event extends Model
     ];
 
     /**
+     * Returns event by ID
+     *
+     * @param $id
+     * @return Model|null
+     */
+    public static function getEventWithAllByID($id): Model|null
+    {
+        return self::with('eventType')->
+        with('client')->
+        with('staff')->
+        where('id', $id)->
+        first();
+    }
+
+    /**
      * Returns collection of events by datetime and period
      *
      * @param $dateTime
@@ -40,6 +55,8 @@ class Event extends Model
         switch($period) {
             case 'day':
                 $events = self::with('eventType')->
+                with('client')->
+                with('staff')->
                 whereBetween('start',
                     [date('Y-m-d', strtotime($dateTime)).' 00:00:01',
                         date('Y-m-d', strtotime($dateTime)).' 23:59:59'])->
@@ -52,6 +69,8 @@ class Event extends Model
                 $monday = date("Y-m-d", strtotime('monday this week', strtotime($dateTime)));
                 $sunday = date("Y-m-d", strtotime('sunday this week', strtotime($dateTime)));
                 $events = self::with('eventType')->
+                with('client')->
+                with('staff')->
                 whereBetween('start',
                     [$monday.' 00:00:01',
                         $sunday.' 23:59:59'])->
@@ -64,6 +83,8 @@ class Event extends Model
                 $first = date("Y-m-d", strtotime('first day of this month', strtotime($dateTime)));
                 $last = date("Y-m-d", strtotime('last day of this month', strtotime($dateTime)));
                 $events = self::with('eventType')->
+                with('client')->
+                with('staff')->
                 whereBetween('start',
                     [$first.' 00:00:01',
                         $last.' 23:59:59'])->
@@ -93,6 +114,16 @@ class Event extends Model
                                                OR (events.start >= ? AND events.end <= ?))',
                                     [$staff_id, $start, $start, $end, $end, $start, $end]);
         return !(count($events) > 0);
+    }
+
+    public function client(): BelongsTo
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    public function staff(): BelongsTo
+    {
+        return $this->belongsTo(Staff::class);
     }
 
     public function eventType(): BelongsTo
