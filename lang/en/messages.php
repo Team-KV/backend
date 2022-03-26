@@ -13,6 +13,7 @@ return [
     'eventTypeUpdateError' => 'Event type cannot be updated.',
     'eventTypeAlreadyExistsError' => 'Event type already exists.',
     'eventTypeDoesntExistError' => 'Event type doesn\'t exist.',
+    'eventTypeDeleteError' => 'Event type cannot be deleted. Event type is used.',
     'eventCreateError' => 'Event cannot be created.',
     'eventDateFormatError' => 'Bad format of date and time.',
     'eventDateTimeError' => 'Event cannot be created. This time slot is not empty.',

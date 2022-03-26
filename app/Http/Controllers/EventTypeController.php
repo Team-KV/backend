@@ -92,7 +92,11 @@ class EventTypeController extends Controller
             return response(['message' => trans('messages.eventTypeDoesntExistError')], 404);
         }
 
-        //TODO: Check if doesn't appear in any event
+        $events = $eventType->event;
+
+        if(count($events) > 0) {
+            return response(['message' => trans('messages.eventTypeDeleteError')], 400);
+        }
 
         $eventType->delete();
 

@@ -119,4 +119,17 @@ class EventController extends Controller
             return response(['message' => trans('messages.eventUpdateError')], 409);
         }
     }
+
+    public function delete($id) {
+        $event = Event::getEventByID($id);
+        if($event == null) {
+            return response(['message' => trans('messages.eventDoesntExistError')], 404);
+        }
+
+        //TODO: Remove attached objects
+
+        $event->delete();
+
+        return response('', 204);
+    }
 }

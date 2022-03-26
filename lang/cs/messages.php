@@ -13,6 +13,7 @@ return [
     'eventTypeUpdateError' => 'Typ události nelze upravit.',
     'eventTypeAlreadyExistsError' => 'Typ události již existuje.',
     'eventTypeDoesntExistError' => 'Typ události neexistuje.',
+    'eventTypeDeleteError' => 'Typ události nelze smazat. Typ události je používán.',
     'eventCreateError' => 'Událost nelze vytvořit.',
     'eventDateFormatError' => 'Špatný formát data a času.',
     'eventDateTimeError' => 'Událost nelze vytvořit. Tento čas není volný.',
