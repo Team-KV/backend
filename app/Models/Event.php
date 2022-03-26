@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 
 class Event extends Model
@@ -29,6 +30,17 @@ class Event extends Model
 
     /**
      * Returns event by ID
+     *
+     * @param $id
+     * @return Event|null
+     */
+    public static function getEventByID($id): Event|null
+    {
+        return self::all()->where('id', $id)->first();
+    }
+
+    /**
+     * Returns event by ID with all information
      *
      * @param $id
      * @return Model|null
@@ -98,6 +110,23 @@ class Event extends Model
     }
 
     /**
+     * Updates event with params
+     *
+     * @param Event $event
+     * @param $params
+     * @return bool
+     */
+    public static function updateEvent(Event $event, $params): bool
+    {
+        try {
+            $event->update($params);
+            return true;
+        } catch(QueryException) {
+            return false;
+        }
+    }
+
+    /**
      * Checks if there is free time in calendar for specific staff
      *
      * @param $staff_id
@@ -105,14 +134,24 @@ class Event extends Model
      * @param $end
      * @return bool
      */
-    public static function checkFreeTime($staff_id, $start, $end): bool
+    public static function checkFreeTime($staff_id, $start, $end, $event_id = null): bool
     {
-        $events = DB::select('SELECT * FROM events
+        if($event_id == null) {
+            $events = DB::select('SELECT * FROM events
                                     WHERE events.staff_id = ?
                                       AND ((events.start <= ? AND events.end >= ?)
                                                OR (events.start <= ? AND events.end >= ?)
                                                OR (events.start >= ? AND events.end <= ?))',
-                                    [$staff_id, $start, $start, $end, $end, $start, $end]);
+                [$staff_id, $start, $start, $end, $end, $start, $end]);
+        }
+        else {
+            $events = DB::select('SELECT * FROM events
+                                    WHERE events.staff_id = ? AND events.id <> ?
+                                      AND ((events.start <= ? AND events.end >= ?)
+                                               OR (events.start <= ? AND events.end >= ?)
+                                               OR (events.start >= ? AND events.end <= ?))',
+                [$staff_id, $event_id, $start, $start, $end, $end, $start, $end]);
+        }
         return !(count($events) > 0);
     }
 

@@ -78,7 +78,7 @@ class EventTypeController extends Controller
             return response(['message' => trans('messages.eventTypeAlreadyExistsError')], 409);
         }
 
-        if(EventType::updateEventTypeByID($eventType, $params)) {
+        if(EventType::updateEventType($eventType, $params)) {
             return response()->json(['EventType' => $eventType]);
         }
         else {

@@ -60,7 +60,7 @@ class EventType extends Model
      * @param $params
      * @return bool
      */
-    public static function updateEventTypeByID(EventType $eventType, $params): bool
+    public static function updateEventType(EventType $eventType, $params): bool
     {
         try {
             $eventType->update($params);

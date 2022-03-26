@@ -58,6 +58,8 @@ Route::middleware('localization')->middleware(['auth:sanctum', 'ability:admin'])
     Route::post('/event', [EventController::class, 'create'])->name('create_event');
 
     Route::get('/event/{id}', [EventController::class, 'detail'])->name('detail_of_event');
+
+    Route::put('/event/{id}', [EventController::class, 'update'])->name('update_event');
 });
 
 Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {
