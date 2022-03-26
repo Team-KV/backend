@@ -12,5 +12,8 @@ return [
     'eventTypeCreateError' => 'Event type cannot be created.',
     'eventTypeUpdateError' => 'Event type cannot be updated.',
     'eventTypeAlreadyExistsError' => 'Event type already exists.',
-    'eventTypeDoesntExistError' => 'Event type doesn\'t exist.'
+    'eventTypeDoesntExistError' => 'Event type doesn\'t exist.',
+    'eventCreateError' => 'Event cannot be created.',
+    'eventDateFormatError' => 'Bad format of date and time.',
+    'eventDateTimeError' => 'Event cannot be created. This time slot is not empty.'
 ];

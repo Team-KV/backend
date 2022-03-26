@@ -9,8 +9,11 @@ return [
     'clientEmailError' => 'Email klienta není nastaven.',
     'clientUpdateError' => 'Klienta se nepodařilo upravit. Zkuste to prosím znovu.',
     'userCreateError' => 'Uživatele pro klienta se nepodařilo vytvořit.',
-    'eventTypeCreateError' => 'Typ akce nelze vytvořit.',
-    'eventTypeUpdateError' => 'Typ akce nelze aktulizovat.',
-    'eventTypeAlreadyExistsError' => 'Typ akce již existuje.',
-    'eventTypeDoesntExistError' => 'Typ akce neexistuje.'
+    'eventTypeCreateError' => 'Typ události nelze vytvořit.',
+    'eventTypeUpdateError' => 'Typ události nelze aktulizovat.',
+    'eventTypeAlreadyExistsError' => 'Typ události již existuje.',
+    'eventTypeDoesntExistError' => 'Typ události neexistuje.',
+    'eventCreateError' => 'Událost nelze vytvořit.',
+    'eventDateFormatError' => 'Špatný formát data a času.',
+    'eventDateTimeError' => 'Událost nelze vytvořit. Tento čas není volný.'
 ];

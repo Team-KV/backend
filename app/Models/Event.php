@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use DateTime;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\DB;
 
 class Event extends Model
 {
@@ -27,6 +27,13 @@ class Event extends Model
         'staff_id'
     ];
 
+    /**
+     * Returns collection of events by datetime and period
+     *
+     * @param $dateTime
+     * @param String $period
+     * @return Collection
+     */
     public static function getAllEvents($dateTime, String $period = 'day'): Collection
     {
         $events = Collection::empty();
@@ -67,6 +74,25 @@ class Event extends Model
                 break;
         }
         return $events;
+    }
+
+    /**
+     * Checks if there is free time in calendar for specific staff
+     *
+     * @param $staff_id
+     * @param $start
+     * @param $end
+     * @return bool
+     */
+    public static function checkFreeTime($staff_id, $start, $end): bool
+    {
+        $events = DB::select('SELECT * FROM events
+                                    WHERE events.staff_id = ?
+                                      AND ((events.start <= ? AND events.end >= ?)
+                                               OR (events.start <= ? AND events.end >= ?)
+                                               OR (events.start >= ? AND events.end <= ?))',
+                                    [$staff_id, $start, $start, $end, $end, $start, $end]);
+        return !(count($events) > 0);
     }
 
     public function eventType(): BelongsTo
