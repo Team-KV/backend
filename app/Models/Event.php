@@ -70,10 +70,10 @@ class Event extends Model
                 with('client')->
                 with('staff')->
                 whereBetween('start',
-                    [date('Y-m-d', strtotime($dateTime)).' 00:00:01',
+                    [date('Y-m-d', strtotime($dateTime)).' 00:00:00',
                         date('Y-m-d', strtotime($dateTime)).' 23:59:59'])->
                 whereBetween('end',
-                    [date('Y-m-d', strtotime($dateTime)).' 00:00:01',
+                    [date('Y-m-d', strtotime($dateTime)).' 00:00:00',
                         date('Y-m-d', strtotime($dateTime)).' 23:59:59'])->
                 get();
                 break;
@@ -84,10 +84,10 @@ class Event extends Model
                 with('client')->
                 with('staff')->
                 whereBetween('start',
-                    [$monday.' 00:00:01',
+                    [$monday.' 00:00:00',
                         $sunday.' 23:59:59'])->
                 whereBetween('end',
-                    [$monday.' 00:00:01',
+                    [$monday.' 00:00:00',
                         $sunday.' 23:59:59'])->
                 get();
                 break;
@@ -98,10 +98,10 @@ class Event extends Model
                 with('client')->
                 with('staff')->
                 whereBetween('start',
-                    [$first.' 00:00:01',
+                    [$first.' 00:00:00',
                         $last.' 23:59:59'])->
                 whereBetween('end',
-                    [$first.' 00:00:01',
+                    [$first.' 00:00:00',
                         $last.' 23:59:59'])->
                 get();
                 break;
