@@ -26,6 +26,16 @@ class Record extends Model
 
 
     /**
+     * Returns record by ID
+     *
+     * @param $id
+     * @return Model|null
+     */
+    public static function getRecordByID($id): Model|null {
+        return self::all()->where('id', $id)->first();
+    }
+
+    /**
      * Returns collection of records for specific event
      *
      * @param $event_id

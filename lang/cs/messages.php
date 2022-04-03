@@ -19,5 +19,6 @@ return [
     'eventDateTimeError' => 'Událost nelze vytvořit. Tento čas není volný.',
     'eventDoesntExistError' => 'Událost neexistuje.',
     'eventUpdateError' => 'Událost se nepodařilo upravit.',
-    'recordCreateError' => 'Záznam se nepodařilo vytvořit.'
+    'recordCreateError' => 'Záznam se nepodařilo vytvořit.',
+    'recordDoesntExistError' => 'Záznam neexistuje.'
 ];

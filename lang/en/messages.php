@@ -19,5 +19,6 @@ return [
     'eventDateTimeError' => 'Event cannot be created. This time slot is not empty.',
     'eventDoesntExistError' => 'Event doesn\'t exist.',
     'eventUpdateError' => 'Event cannot be updated.',
-    'recordCreateError' => 'Record cannot be created.'
+    'recordCreateError' => 'Record cannot be created.',
+    'recordDoesntExistError' => 'Record doesn\'t exist.'
 ];

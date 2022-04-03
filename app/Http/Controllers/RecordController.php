@@ -24,6 +24,7 @@ class RecordController extends Controller
     /**
      * Creates new client object
      *
+     * @param $event_id
      * @param Request $request
      * @return Response|JsonResponse
      */
@@ -43,6 +44,15 @@ class RecordController extends Controller
             return response(['message' => trans('messages.recordCreateError')], 409);
         }
 
+        return response()->json(['Record' => $record]);
+    }
+
+    public function detail($id): Response|JsonResponse
+    {
+        $record = Record::getRecordByID($id);
+        if($record == null) {
+            return response(['message' => trans('messages.recordDoesntExistError')], 404);
+        }
         return response()->json(['Record' => $record]);
     }
 }
