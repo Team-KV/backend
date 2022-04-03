@@ -77,11 +77,15 @@ class EventController extends Controller
      * Returns response with event by ID
      *
      * @param $id
-     * @return JsonResponse
+     * @return Response|JsonResponse
      */
-    public function detail($id): JsonResponse
+    public function detail($id): Response|JsonResponse
     {
-        return response()->json(['Event' => Event::getEventWithAllByID($id)]);
+        $event = Event::getEventWithAllByID($id);
+        if($event == null) {
+            return response(['message' => trans('messages.eventDoesntExistError')], 404);
+        }
+        return response()->json(['Event' => $event]);
     }
 
     public function update($id, Request $request)
