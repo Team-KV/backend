@@ -71,6 +71,8 @@ Route::middleware('localization')->middleware(['auth:sanctum', 'ability:admin'])
     Route::get('/record/{id}', [RecordController::class, 'detail'])->name('detail_of_record');
 
     Route::put('/record/{id}', [RecordController::class, 'update'])->name('update_record');
+
+    Route::delete('/record/{id}', [RecordController::class, 'delete'])->name('delete_record');
 });
 
 Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {

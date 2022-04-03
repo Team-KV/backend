@@ -90,4 +90,22 @@ class RecordController extends Controller
             return response(['message' => trans('messages.recordUpdateError')], 409);
         }
     }
+
+    /**
+     * Deletes record
+     *
+     * @param $id
+     * @return Response
+     */
+    public function delete($id): Response
+    {
+        $record = Record::getRecordByID($id);
+        if($record == null) {
+            return response(['message' => trans('messages.recordDoesntExistError')], 404);
+        }
+
+        $record->delete();
+
+        return response('', 204);
+    }
 }
