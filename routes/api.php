@@ -4,6 +4,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventTypeController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RecordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -62,6 +63,8 @@ Route::middleware('localization')->middleware(['auth:sanctum', 'ability:admin'])
     Route::put('/event/{id}', [EventController::class, 'update'])->name('update_event');
 
     Route::delete('/event/{id}', [EventController::class, 'delete'])->name('delete_event');
+
+    Route::get('/event/{id}/record', [RecordController::class, 'list'])->name('collection_of_records');
 });
 
 Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {
