@@ -33,7 +33,7 @@ class ClientSeeder extends Seeder
             'past_illnesses' => null,
             'injuries_suffered' => 'Zlomený kotník',
             'note' => null,
-            'diag' => 'Rehabilitace zlomeného kotníku.',
+            'anamnesis' => 'Rehabilitace zlomeného kotníku.',
             'client_id' => null,
             'created_at' => now()]);
 
@@ -55,7 +55,7 @@ class ClientSeeder extends Seeder
             'past_illnesses' => null,
             'injuries_suffered' => 'Zlomená pravá ruka',
             'note' => null,
-            'diag' => 'Zvyšování zátěže pravé ruky po komplikované zlomenině.',
+            'anamnesis' => 'Zvyšování zátěže pravé ruky po komplikované zlomenině.',
             'client_id' => 1,
             'created_at' => now()]);
     }

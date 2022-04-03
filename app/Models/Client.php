@@ -36,7 +36,7 @@ class Client extends Model
         'sport',
         'past_illnesses',
         'injuries_suffered',
-        'diag',
+        'anamnesis',
         'note'
     ];
 

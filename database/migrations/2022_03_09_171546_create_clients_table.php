@@ -32,7 +32,7 @@ return new class extends Migration
             $table->string("past_illnesses")->nullable();
             $table->string("injuries_suffered")->nullable();
             $table->text("note")->nullable();
-            $table->text("diag")->nullable();
+            $table->text("anamnesis")->nullable();
             $table->foreignId('client_id')->nullable();
             $table->timestamps();
         });

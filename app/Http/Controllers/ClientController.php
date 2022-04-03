@@ -48,7 +48,7 @@ class ClientController extends Controller
             'sport' => ['string', 'nullable'],
             'past_illnesses' => ['string', 'nullable'],
             'injuries_suffered' => ['string', 'nullable'],
-            'diag' => ['string', 'nullable'],
+            'anamnesis' => ['string', 'nullable'],
             'note' => ['string', 'nullable'],
             'no_czech' => ['boolean'],
             'client_id' => ['integer', 'nullable']
@@ -124,7 +124,7 @@ class ClientController extends Controller
             'sport' => ['string', 'nullable'],
             'past_illnesses' => ['string', 'nullable'],
             'injuries_suffered' => ['string', 'nullable'],
-            'diag' => ['string', 'nullable'],
+            'anamnesis' => ['string', 'nullable'],
             'note' => ['string', 'nullable'],
             'no_czech' => ['boolean'],
             'client_id' => ['integer', 'nullable']
