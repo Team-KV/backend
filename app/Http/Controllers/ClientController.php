@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\User;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -81,11 +83,15 @@ class ClientController extends Controller
      * Returns client by ID
      *
      * @param $id
-     * @return JsonResponse
+     * @return Response|JsonResponse
      */
-    public function detail($id): JsonResponse
+    public function detail($id): Response|JsonResponse
     {
-        return response()->json(['Client' => Client::getClientWithAllByID($id)]);
+        $client = Client::getClientWithAllByID($id);
+        if($client == null) {
+            return response(['message' => trans('messages.clientDoesntExistsError')], 404);
+        }
+        return response()->json(['Client' => $client]);
     }
 
     /**
