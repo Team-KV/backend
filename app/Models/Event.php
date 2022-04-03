@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 
@@ -48,10 +49,11 @@ class Event extends Model
     public static function getEventWithAllByID($id): Model|null
     {
         return self::with('eventType')->
-        with('client')->
-        with('staff')->
-        where('id', $id)->
-        first();
+            with('client')->
+            with('staff')->
+            with('records')->
+            where('id', $id)->
+            first();
     }
 
     /**
@@ -168,5 +170,10 @@ class Event extends Model
     public function eventType(): BelongsTo
     {
         return $this->belongsTo(EventType::class);
+    }
+
+    public function records(): HasMany
+    {
+        return $this->hasMany(Record::class);
     }
 }
