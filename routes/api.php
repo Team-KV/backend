@@ -23,13 +23,13 @@ Route::middleware('localization')->group(function () {
     Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
 });
 
-Route::middleware('localization')->middleware('auth:sanctum')->group(function () {
+Route::middleware(['localization', 'auth:sanctum'])->group(function () {
     Route::get('/info', [LoginController::class, 'info'])->name('info_about_user');
 
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 
-Route::middleware('localization')->middleware(['auth:sanctum', 'ability:admin'])->group(function () {
+Route::middleware(['localization', 'auth:sanctum'])->group(function () {
     Route::get('/client', [ClientController::class, 'list'])->name('collection_of_clients');
 
     Route::post('/client', [ClientController::class, 'create'])->name('create_client');
