@@ -29,7 +29,7 @@ Route::middleware(['localization', 'auth:sanctum'])->group(function () {
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 
-Route::middleware(['localization', 'auth:sanctum'])->group(function () {
+Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(function () {
     Route::get('/client', [ClientController::class, 'list'])->name('collection_of_clients');
 
     Route::post('/client', [ClientController::class, 'create'])->name('create_client');
