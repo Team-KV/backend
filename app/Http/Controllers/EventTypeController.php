@@ -49,11 +49,15 @@ class EventTypeController extends Controller
      * Returns response with event type object
      *
      * @param $id
-     * @return JsonResponse
+     * @return Response|JsonResponse
      */
-    public function detail($id): JsonResponse
+    public function detail($id): Response|JsonResponse
     {
-        return response()->json(['EventType' => EventType::getEventTypeByID($id)]);
+        $eventType = EventType::getEventTypeByID($id);
+        if($eventType == null) {
+            return response(['message' => trans('messages.eventTypeDoesntExistError')], 404);
+        }
+        return response()->json(['EventType' => $eventType]);
     }
 
     /**
