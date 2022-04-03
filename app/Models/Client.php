@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\GraphData;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -56,14 +57,19 @@ class Client extends Model
      * @param $id
      * @return Client|null
      */
-    public static function getClientByID($id): Model|null
+    public static function getClientByID($id): Client|null
     {
         return self::all()->where('id', $id)->first();
     }
 
     public static function getClientWithAllByID($id): Model|null
     {
-        return self::with('user')->with('parent')->with('children')->where('id', $id)->first();
+        return self::with('user')->
+            with('parent')->
+            with('children')->
+            with('events')->
+            where('id', $id)->
+            first();
     }
 
     /**
@@ -160,6 +166,29 @@ class Client extends Model
         return true;
     }
 
+    /**
+     * Returns graph data from records for specific client in array
+     *
+     * @param $id
+     * @return array
+     */
+    public static function getGraphData($id): array
+    {
+        $data = array();
+        $progress = 0;
+        $events = Event::getEventsByClientID($id);
+        foreach($events as $event) {
+            $records = Record::getRecordsByEventID($event->id);
+            foreach($records as $record) {
+                $progress += $record->progress;
+                $graphData = new GraphData($event->start, $progress);
+                array_push($data, $graphData);
+            }
+        }
+
+        return $data;
+    }
+
     public function parent(): BelongsTo
     {
         return $this->belongsTo(Client::class, 'client_id');
@@ -173,5 +202,10 @@ class Client extends Model
     public function user(): HasOne
     {
         return $this->hasOne(User::class);
+    }
+
+    public function events(): HasMany
+    {
+        return $this->hasMany(Event::class);
     }
 }

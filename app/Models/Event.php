@@ -57,6 +57,19 @@ class Event extends Model
     }
 
     /**
+     * Returns sorted events for specific client
+     *
+     * @param $client_id
+     * @return Collection
+     */
+    public static function getEventsByClientID($client_id): Collection
+    {
+        return self::all()->
+            where('client_id', $client_id)->
+            sortBy('start');
+    }
+
+    /**
      * Returns collection of events by datetime and period
      *
      * @param $dateTime

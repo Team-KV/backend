@@ -42,6 +42,8 @@ Route::middleware('localization')->middleware(['auth:sanctum', 'ability:admin'])
 
     Route::post('/client/{id}/user', [ClientController::class, 'createUser'])->name('create_client_user');
 
+    Route::get('/client/{id}/graph', [ClientController::class, 'graph'])->name('graph_data');
+
 
     Route::get('/event-type', [EventTypeController::class, 'list'])->name('collection_of_event_types');
 

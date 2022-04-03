@@ -175,4 +175,15 @@ class ClientController extends Controller
 
         return response()->json(['Client' => Client::getClientWithAllByID($id)]);
     }
+
+    /**
+     * Returns response with graph data for specific client in JSON
+     *
+     * @param $id
+     * @return JsonResponse
+     */
+    public function graph($id): JsonResponse
+    {
+        return response()->json(['GraphData' => Client::getGraphData($id)]);
+    }
 }
