@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\QueryException;
 
 class Record extends Model
 {
@@ -31,7 +32,7 @@ class Record extends Model
      * @param $id
      * @return Model|null
      */
-    public static function getRecordByID($id): Model|null {
+    public static function getRecordByID($id): Record|null {
         return self::all()->where('id', $id)->first();
     }
 
@@ -44,6 +45,23 @@ class Record extends Model
     public static function getRecordsByEventID($event_id): Collection
     {
         return self::all()->where('event_id', $event_id);
+    }
+
+    /**
+     * Updates record with params
+     *
+     * @param Record $record
+     * @param $params
+     * @return bool
+     */
+    public static function updateRecord(Record $record, $params): bool
+    {
+        try {
+            $record->update($params);
+            return true;
+        } catch(QueryException) {
+            return false;
+        }
     }
 
     public function event(): BelongsTo

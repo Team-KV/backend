@@ -20,5 +20,6 @@ return [
     'eventDoesntExistError' => 'Událost neexistuje.',
     'eventUpdateError' => 'Událost se nepodařilo upravit.',
     'recordCreateError' => 'Záznam se nepodařilo vytvořit.',
-    'recordDoesntExistError' => 'Záznam neexistuje.'
+    'recordDoesntExistError' => 'Záznam neexistuje.',
+    'recordUpdateError' => 'Záznam se nepodařilo upravit.'
 ];
