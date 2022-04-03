@@ -18,5 +18,6 @@ return [
     'eventDateFormatError' => 'Bad format of date and time.',
     'eventDateTimeError' => 'Event cannot be created. This time slot is not empty.',
     'eventDoesntExistError' => 'Event doesn\'t exist.',
-    'eventUpdateError' => 'Event cannot be updated.'
+    'eventUpdateError' => 'Event cannot be updated.',
+    'recordCreateError' => 'Record cannot be created.'
 ];

@@ -65,6 +65,8 @@ Route::middleware('localization')->middleware(['auth:sanctum', 'ability:admin'])
     Route::delete('/event/{id}', [EventController::class, 'delete'])->name('delete_event');
 
     Route::get('/event/{id}/record', [RecordController::class, 'list'])->name('collection_of_records');
+
+    Route::post('/event/{id}/record', [RecordController::class, 'create'])->name('create_record');
 });
 
 Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {
