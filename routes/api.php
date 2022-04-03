@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventTypeController;
@@ -75,6 +76,17 @@ Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(func
     Route::put('/record/{id}', [RecordController::class, 'update'])->name('update_record');
 
     Route::delete('/record/{id}', [RecordController::class, 'delete'])->name('delete_record');
+
+
+    Route::get('/category', [CategoryController::class, 'list'])->name('collection_of_categories');
+
+    Route::post('/category', [CategoryController::class, 'create'])->name('create_category');
+
+    Route::get('/category/{id}', [CategoryController::class, 'detail'])->name('detail_of_category');
+
+    Route::put('/category/{id}', [CategoryController::class, 'update'])->name('update_category');
+
+    Route::delete('/category/{id}', [CategoryController::class, 'delete'])->name('delete_category');
 });
 
 Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {

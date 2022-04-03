@@ -21,5 +21,8 @@ return [
     'eventUpdateError' => 'Event cannot be updated.',
     'recordCreateError' => 'Record cannot be created.',
     'recordDoesntExistError' => 'Record doesn\'t exist.',
-    'recordUpdateError' => 'Record cannot be updated.'
+    'recordUpdateError' => 'Record cannot be updated.',
+    'categoryCreateError' => 'Category cannot be created.',
+    'categoryDoesntExistError' => 'Category doesn\'t exist.',
+    'categoryUpdateError' => 'Category cannot be updated.'
 ];

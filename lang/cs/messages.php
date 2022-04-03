@@ -21,5 +21,8 @@ return [
     'eventUpdateError' => 'Událost se nepodařilo upravit.',
     'recordCreateError' => 'Záznam se nepodařilo vytvořit.',
     'recordDoesntExistError' => 'Záznam neexistuje.',
-    'recordUpdateError' => 'Záznam se nepodařilo upravit.'
+    'recordUpdateError' => 'Záznam se nepodařilo upravit.',
+    'categoryCreateError' => 'Kategorii se nepodařilo vytvořit.',
+    'categoryDoesntExistError' => 'Kategorie neexistuje.',
+    'categoryUpdateError' => 'Kategorii se nepodařilo upravit.'
 ];
