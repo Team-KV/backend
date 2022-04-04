@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventTypeController;
+use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RecordController;
 use Illuminate\Http\Request;
@@ -87,6 +88,11 @@ Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(func
     Route::put('/category/{id}', [CategoryController::class, 'update'])->name('update_category');
 
     Route::delete('/category/{id}', [CategoryController::class, 'delete'])->name('delete_category');
+
+
+    Route::get('/exercise', [ExerciseController::class, 'list'])->name('collection_of_exercises');
+
+    Route::post('/exercise', [ExerciseController::class, 'create'])->name('create_exercise');
 });
 
 Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {

@@ -24,5 +24,6 @@ return [
     'recordUpdateError' => 'Record cannot be updated.',
     'categoryCreateError' => 'Category cannot be created.',
     'categoryDoesntExistError' => 'Category doesn\'t exist.',
-    'categoryUpdateError' => 'Category cannot be updated.'
+    'categoryUpdateError' => 'Category cannot be updated.',
+    'exerciseCreateError' => 'Exercise cannot be created.'
 ];

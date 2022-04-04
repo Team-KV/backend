@@ -1,0 +1,69 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Category;
+use App\Models\Exercise;
+use Illuminate\Database\QueryException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
+
+class ExerciseController extends Controller
+{
+    /**
+     * Returns response with exercises in JSON
+     *
+     * @return JsonResponse
+     */
+    public function list(): JsonResponse
+    {
+        return response()->json(Exercise::getAllExercises());
+    }
+
+    /**
+     * Returns response with created exercise in JSON
+     *
+     * @param Request $request
+     * @return Response|JsonResponse
+     */
+    public function create(Request $request): Response|JsonResponse
+    {
+        $params = $request->validate([
+            'name' => ['required', 'string'],
+            'description' => ['string', 'nullable'],
+            'url' => ['string', 'nullable'],
+            'category_id' => ['numeric', 'nullable']
+        ]);
+
+        if(isset($params['category_id']) && $params['category_id'] != null && Category::getCategoryByID($params['category_id']) == null) {
+            return response(['message' => trans('messages.categoryDoesntExistError')], 404);
+        }
+
+        try {
+            $exercise = Exercise::create($params);
+        } catch (QueryException) {
+            return response(['message' => trans('messages.exerciseCreateError')], 409);
+        }
+
+        Storage::makeDirectory('exercises/'.$exercise->id);
+
+        $allowedFileExtension=['jpeg','jpg','png','mp4','avi','mov'];
+        $files = $request->file('files');
+        $counter = 0;
+        $uploaded = [];
+        foreach($files as $file) {
+            $filename = $file->getClientOriginalName();
+            $extension = $file->getClientOriginalExtension();
+            if(in_array($extension, $allowedFileExtension)) {
+                //TODO: Save in DB, create unique filename
+                Storage::put('exercises/'.$exercise->id, $file);
+                array_push($uploaded, $file);
+                $counter++;
+            }
+        }
+
+        return response()->json(['Exercise' => $exercise, 'Count' => $counter]);
+    }
+}

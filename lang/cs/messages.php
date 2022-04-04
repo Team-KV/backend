@@ -24,5 +24,6 @@ return [
     'recordUpdateError' => 'Záznam se nepodařilo upravit.',
     'categoryCreateError' => 'Kategorii se nepodařilo vytvořit.',
     'categoryDoesntExistError' => 'Kategorie neexistuje.',
-    'categoryUpdateError' => 'Kategorii se nepodařilo upravit.'
+    'categoryUpdateError' => 'Kategorii se nepodařilo upravit.',
+    'exerciseCreateError' => 'Cvik se nepodařilo vytvořit.'
 ];
