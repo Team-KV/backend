@@ -115,4 +115,27 @@ class ExerciseController extends Controller
             return response(['message' => trans('messages.exerciseUpdateError')], 409);
         }
     }
+
+    /**
+     * Returns response after success delete
+     *
+     * @param $id
+     * @return Response
+     */
+    public function delete($id): Response
+    {
+        $exercise = Exercise::getExerciseByID($id);
+        if ($exercise == null) {
+            return response(['message' => trans('messages.exerciseDoesntExistError')], 404);
+        }
+
+        ExerciseFile::removeFilesByExerciseID($id);
+
+        Storage::delete(Storage::files('exercises/'.$exercise->id));
+        Storage::deleteDirectory('exercises/'.$exercise->id);
+
+        $exercise->delete();
+
+        return response('', 204);
+    }
 }

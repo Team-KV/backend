@@ -95,6 +95,10 @@ Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(func
     Route::post('/exercise', [ExerciseController::class, 'create'])->name('create_exercise');
 
     Route::get('/exercise/{id}', [ExerciseController::class, 'detail'])->name('detail_of_exercise');
+
+    Route::put('/exercise/{id}', [ExerciseController::class, 'update'])->name('update_exercise');
+
+    Route::delete('/exercise/{id}', [ExerciseController::class, 'delete'])->name('delete_exercise');
 });
 
 Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {

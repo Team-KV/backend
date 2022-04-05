@@ -21,6 +21,20 @@ class ExerciseFile extends Model
         'exercise_id'
     ];
 
+    /**
+     * Removes files by exercise ID
+     *
+     * @param $exercise_id
+     * @return void
+     */
+    public static function removeFilesByExerciseID($exercise_id): void
+    {
+        $files = self::all()->where('exercise_id', $exercise_id);
+        foreach($files as $file) {
+            $file->delete();
+        }
+    }
+
     public function exercise(): BelongsTo
     {
         return $this->belongsTo(Exercise::class);
