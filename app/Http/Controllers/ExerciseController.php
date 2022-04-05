@@ -50,24 +50,13 @@ class ExerciseController extends Controller
 
         Storage::makeDirectory('exercises/'.$exercise->id);
 
-        $allowedFileExtension = ['jpeg', 'jpg', 'png', 'mp4', 'avi', 'mov'];
         $files = $request->file('files');
-        $counter = 0;
         $uploaded = [];
         if(is_array($files)) {
-            foreach ($files as $file) {
-                $filename = $file->getClientOriginalName();
-                $extension = $file->getClientOriginalExtension();
-                if (in_array($extension, $allowedFileExtension)) {
-                    $exerciseFile = ExerciseFile::create(['file_name' => $filename, 'type' => $extension, 'exercise_id' => $exercise->id]);
-                    Storage::put('exercises/' . $exercise->id . '/' . $filename, file_get_contents($file));
-                    array_push($uploaded, $exerciseFile);
-                    $counter++;
-                }
-            }
+            $uploaded = self::uploadFilesToExercise($exercise, $files);
         }
 
-        return response()->json(['Exercise' => $exercise, 'ExerciseFiles' => $uploaded, 'Count' => $counter]);
+        return response()->json(['Exercise' => $exercise, 'ExerciseFiles' => $uploaded, 'Count' => count($uploaded)]);
     }
 
     /**
@@ -139,5 +128,53 @@ class ExerciseController extends Controller
         $exercise->delete();
 
         return response('', 204);
+    }
+
+    /**
+     * Returns response with uploaded files in JSON
+     *
+     * @param $id
+     * @param Request $request
+     * @return Response|JsonResponse
+     */
+    public function upload($id, Request $request): Response|JsonResponse
+    {
+        $exercise = Exercise::getExerciseByID($id);
+        if ($exercise == null) {
+            return response(['message' => trans('messages.exerciseDoesntExistError')], 404);
+        }
+
+        $files = $request->file('files');
+        $uploaded = [];
+        if(is_array($files)) {
+            $uploaded = self::uploadFilesToExercise($exercise, $files);
+        }
+
+        return response()->json(['ExerciseFiles' => $uploaded, 'Count' => count($uploaded)]);
+    }
+
+    /**
+     * Uploads files to exercise
+     *
+     * @param Exercise $exercise
+     * @param array $files
+     * @return array
+     */
+    private static function uploadFilesToExercise(Exercise $exercise, array $files): array
+    {
+        $allowedFileExtension = ['jpeg', 'jpg', 'png', 'mp4', 'avi', 'mov'];
+        $uploaded = [];
+
+        foreach ($files as $file) {
+            $filename = $file->getClientOriginalName();
+            $extension = $file->getClientOriginalExtension();
+            if (in_array($extension, $allowedFileExtension)) {
+                $exerciseFile = ExerciseFile::create(['file_name' => $filename, 'type' => $extension, 'exercise_id' => $exercise->id]);
+                Storage::put('exercises/' . $exercise->id . '/' . $filename, file_get_contents($file));
+                array_push($uploaded, $exerciseFile);
+            }
+        }
+
+        return $uploaded;
     }
 }

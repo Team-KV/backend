@@ -22,6 +22,17 @@ class ExerciseFile extends Model
     ];
 
     /**
+     * Returns exercise file
+     *
+     * @param $id
+     * @return ExerciseFile|null
+     */
+    public static function getFileByID($id): ExerciseFile|null
+    {
+        return self::all()->where('id', $id)->first();
+    }
+
+    /**
      * Removes files by exercise ID
      *
      * @param $exercise_id

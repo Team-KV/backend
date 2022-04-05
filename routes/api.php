@@ -5,6 +5,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventTypeController;
 use App\Http\Controllers\ExerciseController;
+use App\Http\Controllers\ExerciseFileController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RecordController;
 use Illuminate\Http\Request;
@@ -99,6 +100,11 @@ Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(func
     Route::put('/exercise/{id}', [ExerciseController::class, 'update'])->name('update_exercise');
 
     Route::delete('/exercise/{id}', [ExerciseController::class, 'delete'])->name('delete_exercise');
+
+    Route::post('/exercise/{id}/upload', [ExerciseController::class, 'upload'])->name('upload_files_to_exercise');
+
+
+    Route::delete('/exercise-file/{id}', [ExerciseFileController::class, 'delete'])->name('delete_exercise_file');
 });
 
 Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {

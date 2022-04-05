@@ -28,5 +28,6 @@ return [
     'categoryHasExercisesError' => 'Kategorie obsahuje cviky.',
     'exerciseCreateError' => 'Cvik se nepodařilo vytvořit.',
     'exerciseDoesntExistError' => 'Cvik neexistuje.',
-    'exerciseUpdateError' => 'Cvik se nepodařilo upravit.'
+    'exerciseUpdateError' => 'Cvik se nepodařilo upravit.',
+    'fileDoesntExistError' => 'Soubor neexistuje.'
 ];

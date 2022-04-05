@@ -28,5 +28,6 @@ return [
     'categoryHasExercisesError' => 'Category has exercises.',
     'exerciseCreateError' => 'Exercise cannot be created.',
     'exerciseDoesntExistError' => 'Exercise doesn\'t exist.',
-    'exerciseUpdateError' => 'Exercise cannot be updated.'
+    'exerciseUpdateError' => 'Exercise cannot be updated.',
+    'fileDoesntExistError' => 'File doesn\'t exist.'
 ];
