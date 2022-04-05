@@ -25,5 +25,7 @@ return [
     'categoryCreateError' => 'Kategorii se nepodařilo vytvořit.',
     'categoryDoesntExistError' => 'Kategorie neexistuje.',
     'categoryUpdateError' => 'Kategorii se nepodařilo upravit.',
-    'exerciseCreateError' => 'Cvik se nepodařilo vytvořit.'
+    'exerciseCreateError' => 'Cvik se nepodařilo vytvořit.',
+    'exerciseDoesntExistError' => 'Cvik neexistuje.',
+    'exerciseUpdateError' => 'Cvik se nepodařilo upravit.'
 ];

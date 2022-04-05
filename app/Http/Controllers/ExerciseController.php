@@ -67,4 +67,52 @@ class ExerciseController extends Controller
 
         return response()->json(['Exercise' => $exercise, 'ExerciseFiles' => $uploaded, 'Count' => $counter]);
     }
+
+    /**
+     * Returns response with exercise by ID in JSON
+     *
+     * @param $id
+     * @return Response|JsonResponse
+     */
+    public function detail($id): Response|JsonResponse
+    {
+        $exercise = Exercise::getExerciseWithFilesByID($id);
+        if ($exercise == null) {
+            return response(['message' => trans('messages.exerciseDoesntExistError')], 404);
+        }
+
+        return response()->json(['Exercise' => $exercise]);
+    }
+
+    /**
+     * Returns response with updated exercise in JSON
+     *
+     * @param $id
+     * @param Request $request
+     * @return Response|JsonResponse
+     */
+    public function update($id, Request $request): Response|JsonResponse
+    {
+        $exercise = Exercise::getExerciseByID($id);
+        if ($exercise == null) {
+            return response(['message' => trans('messages.exerciseDoesntExistError')], 404);
+        }
+
+        $params = $request->validate([
+            'name' => ['required', 'string'],
+            'description' => ['string', 'nullable'],
+            'url' => ['string', 'nullable'],
+            'category_id' => ['numeric', 'nullable']
+        ]);
+
+        if(isset($params['category_id']) && $params['category_id'] != null && Category::getCategoryByID($params['category_id']) == null) {
+            return response(['message' => trans('messages.categoryDoesntExistError')], 404);
+        }
+
+        if (Exercise::updateExercise($exercise, $params)) {
+            return response()->json(['Exercise' => $exercise]);
+        } else {
+            return response(['message' => trans('messages.exerciseUpdateError')], 409);
+        }
+    }
 }

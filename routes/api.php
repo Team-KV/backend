@@ -93,6 +93,8 @@ Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(func
     Route::get('/exercise', [ExerciseController::class, 'list'])->name('collection_of_exercises');
 
     Route::post('/exercise', [ExerciseController::class, 'create'])->name('create_exercise');
+
+    Route::get('/exercise/{id}', [ExerciseController::class, 'detail'])->name('detail_of_exercise');
 });
 
 Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {

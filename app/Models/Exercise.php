@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\QueryException;
 
 class Exercise extends Model
 {
@@ -32,6 +33,43 @@ class Exercise extends Model
     public static function getAllExercises(): Collection
     {
         return self::all();
+    }
+
+    /**
+     * Returns exercise with files by ID
+     *
+     * @param $id
+     * @return Model|null
+     */
+    public static function getExerciseWithFilesByID($id): Model|null {
+        return self::with('files')->where('id', $id)->first();
+    }
+
+    /**
+     * Returns exercise by ID
+     *
+     * @param $id
+     * @return Exercise|null
+     */
+    public static function getExerciseByID($id): Exercise|null {
+        return self::all()->where('id', $id)->first();
+    }
+
+    /**
+     * Updates exercise object with params
+     *
+     * @param Exercise $exercise
+     * @param $params
+     * @return bool
+     */
+    public static function updateExercise(Exercise $exercise, $params): bool
+    {
+        try {
+            $exercise->update($params);
+            return true;
+        } catch(QueryException) {
+            return false;
+        }
     }
 
     public function category(): BelongsTo
