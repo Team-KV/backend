@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Exercise;
+use App\Models\ExerciseFile;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -57,13 +58,13 @@ class ExerciseController extends Controller
             $filename = $file->getClientOriginalName();
             $extension = $file->getClientOriginalExtension();
             if(in_array($extension, $allowedFileExtension)) {
-                //TODO: Save in DB, create unique filename
-                Storage::put('exercises/'.$exercise->id, $file);
-                array_push($uploaded, $file);
+                $exerciseFile = ExerciseFile::create(['file_name' => $filename, 'type' => $extension, 'exercise_id' => $exercise->id]);
+                Storage::put('exercises/'.$exercise->id.'/'.$filename, file_get_contents($file));
+                array_push($uploaded, $exerciseFile);
                 $counter++;
             }
         }
 
-        return response()->json(['Exercise' => $exercise, 'Count' => $counter]);
+        return response()->json(['Exercise' => $exercise, 'ExerciseFiles' => $uploaded, 'Count' => $counter]);
     }
 }
