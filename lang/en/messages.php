@@ -25,6 +25,7 @@ return [
     'categoryCreateError' => 'Category cannot be created.',
     'categoryDoesntExistError' => 'Category doesn\'t exist.',
     'categoryUpdateError' => 'Category cannot be updated.',
+    'categoryHasExercisesError' => 'Category has exercises.',
     'exerciseCreateError' => 'Exercise cannot be created.',
     'exerciseDoesntExistError' => 'Exercise doesn\'t exist.',
     'exerciseUpdateError' => 'Exercise cannot be updated.'

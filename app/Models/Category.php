@@ -34,6 +34,17 @@ class Category extends Model
     }
 
     /**
+     * Returns category with all by ID
+     *
+     * @param $id
+     * @return Model|null
+     */
+    public static function getCategoryWithAllByID($id): Model|null
+    {
+        return self::with('exercises')->where('id', $id)->first();
+    }
+
+    /**
      * Returns collection of categories
      *
      * @return Collection

@@ -92,12 +92,14 @@ class CategoryController extends Controller
      */
     public function delete($id): Response
     {
-        $category = Category::getCategoryByID($id);
+        $category = Category::getCategoryWithAllByID($id);
         if ($category == null) {
             return response(['message' => trans('messages.categoryDoesntExistError')], 404);
         }
 
-        //TODO: Check exercises in category
+        if(count($category->exercises) != 0) {
+            return response(['message' => trans('messages.categoryHasExercisesError')], 409);
+        }
 
         $category->delete();
 
