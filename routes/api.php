@@ -104,6 +104,8 @@ Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(func
     Route::post('/exercise/{id}/upload', [ExerciseController::class, 'upload'])->name('upload_files_to_exercise');
 
 
+    Route::get('/exercise-file/{id}', [ExerciseFileController::class, 'download'])->name('download_exercise_file');
+
     Route::delete('/exercise-file/{id}', [ExerciseFileController::class, 'delete'])->name('delete_exercise_file');
 });
 
