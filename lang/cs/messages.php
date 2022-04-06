@@ -29,5 +29,6 @@ return [
     'exerciseCreateError' => 'Cvik se nepodařilo vytvořit.',
     'exerciseDoesntExistError' => 'Cvik neexistuje.',
     'exerciseUpdateError' => 'Cvik se nepodařilo upravit.',
-    'fileDoesntExistError' => 'Soubor neexistuje.'
+    'fileDoesntExistError' => 'Soubor neexistuje.',
+    'missingClientIdParameterError' => 'Chybí parametr ID klienta.'
 ];

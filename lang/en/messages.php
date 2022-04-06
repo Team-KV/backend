@@ -29,5 +29,6 @@ return [
     'exerciseCreateError' => 'Exercise cannot be created.',
     'exerciseDoesntExistError' => 'Exercise doesn\'t exist.',
     'exerciseUpdateError' => 'Exercise cannot be updated.',
-    'fileDoesntExistError' => 'File doesn\'t exist.'
+    'fileDoesntExistError' => 'File doesn\'t exist.',
+    'missingClientIdParameterError' => 'Missong ID of client parameter.'
 ];
