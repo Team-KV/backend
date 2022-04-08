@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\QueryException;
 
@@ -41,7 +42,8 @@ class Exercise extends Model
      * @param $id
      * @return Model|null
      */
-    public static function getExerciseWithFilesByID($id): Model|null {
+    public static function getExerciseWithFilesByID($id): Model|null
+    {
         return self::with('files')->where('id', $id)->first();
     }
 
@@ -51,7 +53,8 @@ class Exercise extends Model
      * @param $id
      * @return Exercise|null
      */
-    public static function getExerciseByID($id): Exercise|null {
+    public static function getExerciseByID($id): Exercise|null
+    {
         return self::all()->where('id', $id)->first();
     }
 
@@ -67,7 +70,7 @@ class Exercise extends Model
         try {
             $exercise->update($params);
             return true;
-        } catch(QueryException) {
+        } catch (QueryException) {
             return false;
         }
     }
@@ -80,5 +83,10 @@ class Exercise extends Model
     public function files(): HasMany
     {
         return $this->hasMany(ExerciseFile::class);
+    }
+
+    public function tasks(): BelongsToMany
+    {
+        return $this->belongsToMany(Task::class);
     }
 }

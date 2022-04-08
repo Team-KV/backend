@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('exercise_tasks', function (Blueprint $table) {
+        Schema::create('exercise_task', function (Blueprint $table) {
             $table->id();
             $table->string('feedback')->nullable();
             $table->integer('difficulty')->nullable();

@@ -30,5 +30,9 @@ return [
     'exerciseDoesntExistError' => 'Cvik neexistuje.',
     'exerciseUpdateError' => 'Cvik se nepodařilo upravit.',
     'fileDoesntExistError' => 'Soubor neexistuje.',
-    'missingClientIdParameterError' => 'Chybí parametr ID klienta.'
+    'missingEventIdParameterError' => 'Chybí parametr ID události.',
+    'missingClientIdParameterError' => 'Chybí parametr ID klienta.',
+    'taskCreateError' => 'Úkol se nepodařilo vytvořit.',
+    'taskDoesntExistError' => 'Úkol neexistuje.',
+    'taskUpdateError' => 'Úkol se nepodařilo upravit.'
 ];

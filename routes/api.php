@@ -8,6 +8,7 @@ use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\ExerciseFileController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RecordController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -107,6 +108,17 @@ Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(func
     Route::get('/exercise-file/{id}', [ExerciseFileController::class, 'download'])->name('download_exercise_file');
 
     Route::delete('/exercise-file/{id}', [ExerciseFileController::class, 'delete'])->name('delete_exercise_file');
+
+
+    Route::get('/task', [TaskController::class, 'list'])->name('collection_of_tasks');
+
+    Route::post('/task', [TaskController::class, 'create'])->name('create_task');
+
+    Route::get('/task/{id}', [TaskController::class, 'detail'])->name('detail_of_task');
+
+    Route::put('/task/{id}', [TaskController::class, 'update'])->name('update_task');
+
+    Route::delete('/task/{id}', [TaskController::class, 'delete'])->name('delete_task');
 });
 
 Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {

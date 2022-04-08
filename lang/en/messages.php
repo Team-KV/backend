@@ -30,5 +30,9 @@ return [
     'exerciseDoesntExistError' => 'Exercise doesn\'t exist.',
     'exerciseUpdateError' => 'Exercise cannot be updated.',
     'fileDoesntExistError' => 'File doesn\'t exist.',
-    'missingClientIdParameterError' => 'Missong ID of client parameter.'
+    'missingEventIdParameterError' => 'Missing ID of event parameter.',
+    'missingClientIdParameterError' => 'Missing ID of client parameter.',
+    'taskCreateError' => 'Task cannot be created.',
+    'taskDoesntExistError' => 'Task doesn\'t exist.',
+    'taskUpdateError' => 'Úkol se nepodařilo upravit.'
 ];
