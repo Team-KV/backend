@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use App\Models\Event;
 use App\Models\ExerciseTask;
 use App\Models\Task;
@@ -49,7 +50,13 @@ class TaskController extends Controller
             'event_id' => ['required', 'numeric']
         ]);
 
-        //TODO: Client and event check
+        if(Client::getClientByID($params['client_id']) == null) {
+            return response(['message' => trans('messages.clientDoesntExistsError')], 404);
+        }
+
+        if(Event::getEventByID($params['event_id']) == null) {
+            return response(['message' => trans('messages.eventDoesntExistError')], 404);
+        }
 
         try {
             $task = Task::create($params);
@@ -97,7 +104,13 @@ class TaskController extends Controller
             'event_id' => ['required', 'numeric']
         ]);
 
-        //TODO: Client and event check
+        if(Client::getClientByID($params['client_id']) == null) {
+            return response(['message' => trans('messages.clientDoesntExistsError')], 404);
+        }
+
+        if(Event::getEventByID($params['event_id']) == null) {
+            return response(['message' => trans('messages.eventDoesntExistError')], 404);
+        }
 
         if(Task::updateTask($task, $params)) {
             return response()->json(['Task' => $task]);
