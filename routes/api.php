@@ -119,6 +119,8 @@ Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(func
     Route::put('/task/{id}', [TaskController::class, 'update'])->name('update_task');
 
     Route::delete('/task/{id}', [TaskController::class, 'delete'])->name('delete_task');
+
+    Route::patch('/task/{id}/change-status', [TaskController::class, 'changeStatus'])->name('change_status_of_task');
 });
 
 Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {
