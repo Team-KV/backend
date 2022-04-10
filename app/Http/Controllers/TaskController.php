@@ -139,4 +139,18 @@ class TaskController extends Controller
 
         return response('', 204);
     }
+
+    public function changeStatus($id): Response|JsonResponse
+    {
+        $task = Task::getTaskByID($id);
+        if($task == null) {
+            return response(['message' => trans('messages.taskDoesntExistError')], 404);
+        }
+
+        $task->is_active = !$task->is_active;
+
+        $task->save();
+
+        return response()->json(['Task' => $task]);
+    }
 }
