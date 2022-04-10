@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\Event;
+use App\Models\Exercise;
 use App\Models\ExerciseTask;
 use App\Models\Task;
 use Illuminate\Database\QueryException;
@@ -140,6 +141,12 @@ class TaskController extends Controller
         return response('', 204);
     }
 
+    /**
+     * Returns response with task with changed status in JSON
+     *
+     * @param $id
+     * @return Response|JsonResponse
+     */
     public function changeStatus($id): Response|JsonResponse
     {
         $task = Task::getTaskByID($id);
@@ -152,5 +159,41 @@ class TaskController extends Controller
         $task->save();
 
         return response()->json(['Task' => $task]);
+    }
+
+    /**
+     * Returns response with added exercise tasks in JSON
+     *
+     * @param $id
+     * @param Request $request
+     * @return Response|JsonResponse
+     */
+    public function addExercises($id, Request $request): Response|JsonResponse
+    {
+        $task = Task::getTaskByID($id);
+        if($task == null) {
+            return response(['message' => trans('messages.taskDoesntExistError')], 404);
+        }
+
+        $params = $request->validate([
+            'exerciseTasks' => ['required', 'array']
+        ]);
+
+        foreach($params['exerciseTasks'] as $exerciseTask) {
+            if(Exercise::getExerciseByID($exerciseTask['exercise_id']) != null) {
+                $exerciseTask['task_id'] = $id;
+                try {
+                    $task->exercises()->attach($exerciseTask['exercise_id'], [
+                        'task_id' => $id,
+                        'feedback' => $exerciseTask['feedback'],
+                        'difficulty' => $exerciseTask['difficulty'],
+                        'repetitions' => $exerciseTask['repetitions'],
+                        'duration' => $exerciseTask['duration']
+                    ]);
+                } catch (QueryException) {}
+            }
+        }
+
+        return response()->json(['ExerciseTasks' => ExerciseTask::getExerciseTasksByTaskID($id)]);
     }
 }
