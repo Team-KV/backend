@@ -34,5 +34,7 @@ return [
     'missingClientIdParameterError' => 'Chybí parametr ID klienta.',
     'taskCreateError' => 'Úkol se nepodařilo vytvořit.',
     'taskDoesntExistError' => 'Úkol neexistuje.',
-    'taskUpdateError' => 'Úkol se nepodařilo upravit.'
+    'taskUpdateError' => 'Úkol se nepodařilo upravit.',
+    'exerciseTaskDoesntExistError' => 'Hodnocení cviku neexistuje.',
+    'exerciseTaskUpdateError' => 'Hodnocení cviku se nepodařilo upravit.'
 ];

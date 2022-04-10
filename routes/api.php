@@ -6,6 +6,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventTypeController;
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\ExerciseFileController;
+use App\Http\Controllers\ExerciseTaskController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RecordController;
 use App\Http\Controllers\TaskController;
@@ -123,6 +124,11 @@ Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(func
     Route::patch('/task/{id}/change-status', [TaskController::class, 'changeStatus'])->name('change_status_of_task');
 
     Route::post('/task/{id}/add-exercises', [TaskController::class, 'addExercises'])->name('add_exercises_to_task');
+
+
+    Route::put('/exercise-task/{id}', [ExerciseTaskController::class, 'update'])->name('update_exercise_task');
+
+    Route::delete('/exercise-task/{id}', [ExerciseTaskController::class, 'delete'])->name('delete_exercise_task');
 });
 
 Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {

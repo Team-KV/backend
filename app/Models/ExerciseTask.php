@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -26,6 +27,16 @@ class ExerciseTask extends Model
     ];
 
     /**
+     * Returns exercise task by ID
+     *
+     * @param $id
+     */
+    public static function getExerciseTaskByID($id)
+    {
+        return DB::table('exercise_task')->where('id', $id)->first();
+    }
+
+    /**
      * Returns collection of exercise tasks by task ID
      *
      * @param $task_id
@@ -34,16 +45,5 @@ class ExerciseTask extends Model
     public static function getExerciseTasksByTaskID($task_id): Collection
     {
         return DB::table('exercise_task')->where('task_id', $task_id)->get();
-    }
-
-    /**
-     * Deletes exerciseTask by task ID
-     *
-     * @param $task_id
-     * @return void
-     */
-    public static function deleteByTaskID($task_id): void
-    {
-        DB::table('exercise_task')->where('task_id', $task_id)->delete();
     }
 }

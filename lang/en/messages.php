@@ -34,5 +34,7 @@ return [
     'missingClientIdParameterError' => 'Missing ID of client parameter.',
     'taskCreateError' => 'Task cannot be created.',
     'taskDoesntExistError' => 'Task doesn\'t exist.',
-    'taskUpdateError' => 'Úkol se nepodařilo upravit.'
+    'taskUpdateError' => 'Úkol se nepodařilo upravit.',
+    'exerciseTaskDoesntExistError' => 'Evaluation of exercise doesn\'t exist.',
+    'exerciseTaskUpdateError' => 'Evaluation of exercise cannot be updated.'
 ];
