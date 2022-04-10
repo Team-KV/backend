@@ -181,7 +181,6 @@ class TaskController extends Controller
 
         foreach($params['exerciseTasks'] as $exerciseTask) {
             if(Exercise::getExerciseByID($exerciseTask['exercise_id']) != null) {
-                $exerciseTask['task_id'] = $id;
                 try {
                     $task->exercises()->attach($exerciseTask['exercise_id'], [
                         'task_id' => $id,
