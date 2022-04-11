@@ -68,6 +68,7 @@ class Client extends Model
             with('parent')->
             with('children')->
             with('events')->
+            with('attachments')->
             where('id', $id)->
             first();
     }
@@ -207,5 +208,10 @@ class Client extends Model
     public function events(): HasMany
     {
         return $this->hasMany(Event::class);
+    }
+
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(Attachment::class);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attachment;
 use App\Models\Client;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
@@ -10,6 +11,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
 class ClientController extends Controller
 {
@@ -54,12 +56,12 @@ class ClientController extends Controller
             'client_id' => ['integer', 'nullable']
         ]);
 
-        if(Client::getClientByPIN($params['personal_information_number']) != null || User::getUserByEmail($params['contact_email']) != null) {
+        if (Client::getClientByPIN($params['personal_information_number']) != null || User::getUserByEmail($params['contact_email']) != null) {
             return response(['message' => trans('messages.clientAlreadyExistsError')], 409);
         }
 
-        if($params['no_czech'] != true && $params['personal_information_number'] != null && $params['personal_information_number'] != '') {
-            if(!Client::verifyPIN($params['personal_information_number'])) {
+        if ($params['no_czech'] != true && $params['personal_information_number'] != null && $params['personal_information_number'] != '') {
+            if (!Client::verifyPIN($params['personal_information_number'])) {
                 return response(['message' => trans('messages.clientPINError')], 409);
             }
         }
@@ -70,8 +72,10 @@ class ClientController extends Controller
             return response(['message' => trans('messages.clientCreateError')], 409);
         }
 
-        if(isset($params['contact_email']) && $params['contact_email'] != "" && $params['contact_email'] != null) {
-            if(!User::createUser($params['contact_email'], $client->id)) {
+        Storage::makeDirectory('clients/' . $client->id);
+
+        if (isset($params['contact_email']) && $params['contact_email'] != "" && $params['contact_email'] != null) {
+            if (!User::createUser($params['contact_email'], $client->id)) {
                 return response('', 409)->json(['message' => trans('messages.userCreateError'), 'Client' => $client]);
             }
         }
@@ -88,7 +92,7 @@ class ClientController extends Controller
     public function detail($id): Response|JsonResponse
     {
         $client = Client::getClientWithAllByID($id);
-        if($client == null) {
+        if ($client == null) {
             return response(['message' => trans('messages.clientDoesntExistsError')], 404);
         }
         return response()->json(['Client' => $client]);
@@ -103,7 +107,7 @@ class ClientController extends Controller
      */
     public function update($id, Request $request): JsonResponse|Response
     {
-        if(Client::getClientByID($id) == null) {
+        if (Client::getClientByID($id) == null) {
             return response(['message' => trans('messages.clientDoesntExistsError')], 404);
         }
 
@@ -130,25 +134,36 @@ class ClientController extends Controller
             'client_id' => ['integer', 'nullable']
         ]);
 
-        if($params['no_czech'] != true && $params['personal_information_number'] != null && $params['personal_information_number'] != '') {
-            if(!Client::verifyPIN($params['personal_information_number'])) {
+        if ($params['no_czech'] != true && $params['personal_information_number'] != null && $params['personal_information_number'] != '') {
+            if (!Client::verifyPIN($params['personal_information_number'])) {
                 return response(['message' => trans('messages.clientPINError')], 409);
             }
         }
 
-        if(Client::updateClientByID($id, $params)) {
+        if (Client::updateClientByID($id, $params)) {
             return response()->json(['Client' => Client::getClientWithAllByID($id)]);
-        }
-        else {
+        } else {
             return response(['message' => trans('messages.clientUpdateError')], 409);
         }
     }
 
+    /**
+     * Returns response after success delete
+     *
+     * @param $id
+     * @return Response
+     */
     public function delete($id): Response
     {
-        if(Client::getClientByID($id) == null) {
+        $client = Client::getClientByID($id);
+        if ($client == null) {
             return response(['message' => trans('messages.clientDoesntExistsError')], 404);
         }
+
+        Attachment::removeFilesByClientID($id);
+
+        Storage::delete(Storage::files('clients/' . $client->id));
+        Storage::deleteDirectory('clients/' . $client->id);
         //TODO: Delete client's objects (events, attachments, ...)
 
         Client::deleteClientByID($id);
@@ -156,20 +171,24 @@ class ClientController extends Controller
         return response('', 204);
     }
 
+    /**
+     * Returns response with created user in JSON
+     *
+     * @param $id
+     * @return Response|JsonResponse
+     */
     public function createUser($id): Response|JsonResponse
     {
         $client = Client::getClientByID($id);
-        if($client != null) {
-            if($client->contact_email != '' && $client->contact_email != null) {
-                if(!User::createUser($client->contact_email, $client->id)) {
+        if ($client != null) {
+            if ($client->contact_email != '' && $client->contact_email != null) {
+                if (!User::createUser($client->contact_email, $client->id)) {
                     return response('', 409)->json(['message' => trans('messages.userCreateError'), 'Client' => $client]);
                 }
-            }
-            else {
+            } else {
                 return response(['message' => trans('messages.clientEmailError')], 409);
             }
-        }
-        else {
+        } else {
             return response(['message' => trans('messages.clientDoesntExistsError')], 404);
         }
 
@@ -185,5 +204,53 @@ class ClientController extends Controller
     public function graph($id): JsonResponse
     {
         return response()->json(['GraphData' => Client::getGraphData($id)]);
+    }
+
+    /**
+     * Returns response with uploaded attachments in JSON
+     *
+     * @param $id
+     * @param Request $request
+     * @return Response|JsonResponse
+     */
+    public function uploadAttachments($id, Request $request): Response|JsonResponse
+    {
+        $client = Client::getClientByID($id);
+        if ($client == null) {
+            return response(['message' => trans('messages.clientDoesntExistsError')], 404);
+        }
+
+        $files = $request->file('files');
+        $uploaded = [];
+        if(is_array($files)) {
+            $uploaded = self::uploadAttachmentsToClient($client, $files);
+        }
+
+        return response()->json(['Attachments' => $uploaded, 'Count' => count($uploaded)]);
+    }
+
+    /**
+     * Uploads attachments to client
+     *
+     * @param Client $client
+     * @param array $files
+     * @return array
+     */
+    private static function uploadAttachmentsToClient(Client $client, array $files): array
+    {
+        $allowedFileExtension = ['jpeg', 'jpg', 'png', 'pdf', 'doc', 'docx'];
+        $uploaded = [];
+
+        foreach ($files as $file) {
+            $filename = $file->getClientOriginalName();
+            $extension = $file->getClientOriginalExtension();
+            if (in_array($extension, $allowedFileExtension)) {
+                $attachment = Attachment::create(['file_name' => $filename, 'type' => $extension, 'client_id' => $client->id]);
+                Storage::put('clients/' . $client->id . '/' . $filename, file_get_contents($file));
+                array_push($uploaded, $attachment);
+            }
+        }
+
+        return $uploaded;
     }
 }

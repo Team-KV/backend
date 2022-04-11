@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\EventController;
@@ -48,6 +49,13 @@ Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(func
     Route::post('/client/{id}/user', [ClientController::class, 'createUser'])->name('create_client_user');
 
     Route::get('/client/{id}/graph', [ClientController::class, 'graph'])->name('graph_data');
+
+    Route::post('/client/{id}/attachment', [ClientController::class, 'uploadAttachments'])->name('upload_attachments_to_client');
+
+
+    Route::get('/attachment/{id}', [AttachmentController::class, 'download'])->name('download_attachment');
+
+    Route::delete('/attachment/{id}', [AttachmentController::class, 'delete'])->name('delete_attachment');
 
 
     Route::get('/event-type', [EventTypeController::class, 'list'])->name('collection_of_event_types');
