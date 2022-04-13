@@ -71,55 +71,56 @@ class Event extends Model
     }
 
     /**
+     * Returns collection of events
+     *
+     * @return Collection
+     */
+    public static function getAllEvents(): Collection
+    {
+        return self::all();
+    }
+
+    /**
      * Returns collection of events by datetime and period
      *
      * @param $dateTime
      * @param String $period
      * @return Collection
      */
-    public static function getAllEvents($dateTime, String $period = 'day'): Collection
+    public static function getAllEventsByFilter($dateTime, String $period = 'day'): Collection
     {
         $events = Collection::empty();
         switch($period) {
             case 'day':
-                $events = self::with('eventType')->
-                with('client')->
-                with('staff')->
+                $events = self::all()->
                 whereBetween('start',
                     [date('Y-m-d', strtotime($dateTime)).' 00:00:00',
                         date('Y-m-d', strtotime($dateTime)).' 23:59:59'])->
                 whereBetween('end',
                     [date('Y-m-d', strtotime($dateTime)).' 00:00:00',
-                        date('Y-m-d', strtotime($dateTime)).' 23:59:59'])->
-                get();
+                        date('Y-m-d', strtotime($dateTime)).' 23:59:59']);
                 break;
             case 'week':
                 $monday = date("Y-m-d", strtotime('monday this week', strtotime($dateTime)));
                 $sunday = date("Y-m-d", strtotime('sunday this week', strtotime($dateTime)));
-                $events = self::with('eventType')->
-                with('client')->
-                with('staff')->
+                $events = self::all()->
                 whereBetween('start',
                     [$monday.' 00:00:00',
                         $sunday.' 23:59:59'])->
                 whereBetween('end',
                     [$monday.' 00:00:00',
-                        $sunday.' 23:59:59'])->
-                get();
+                        $sunday.' 23:59:59']);
                 break;
             case 'month':
                 $first = date("Y-m-d", strtotime('first day of this month', strtotime($dateTime)));
                 $last = date("Y-m-d", strtotime('last day of this month', strtotime($dateTime)));
-                $events = self::with('eventType')->
-                with('client')->
-                with('staff')->
+                $events = self::all()->
                 whereBetween('start',
                     [$first.' 00:00:00',
                         $last.' 23:59:59'])->
                 whereBetween('end',
                     [$first.' 00:00:00',
-                        $last.' 23:59:59'])->
-                get();
+                        $last.' 23:59:59']);
                 break;
         }
         return $events;

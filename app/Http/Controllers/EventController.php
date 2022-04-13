@@ -13,24 +13,34 @@ use Illuminate\Http\Response;
 class EventController extends Controller
 {
     /**
-     * Returns response with collection of events
+     * Returns response with collection of events in JSON
+     *
+     * @return JsonResponse
+     */
+    public function list(): JsonResponse
+    {
+        return response()->json(Event::getAllEvents());
+    }
+
+    /**
+     * Returns response with collection of events by filter in JSON
      *
      * @param Request $request
      * @return JsonResponse
      */
-    public function list(Request $request): JsonResponse
+    public function filter(Request $request): JsonResponse
     {
         if($request->has('period')) {
             if ($request->has('datetime')) {
-                return response()->json(Event::getAllEvents($request->query('datetime'), $request->query('period')));
+                return response()->json(Event::getAllEventsByFilter($request->query('datetime'), $request->query('period')));
             } else {
-                return response()->json(Event::getAllEvents(NOW()->toString(), $request->query('period')));
+                return response()->json(Event::getAllEventsByFilter(NOW()->toString(), $request->query('period')));
             }
         } else {
             if ($request->has('datetime')) {
-                return response()->json(Event::getAllEvents($request->query('datetime')));
+                return response()->json(Event::getAllEventsByFilter($request->query('datetime')));
             } else {
-                return response()->json(Event::getAllEvents(NOW()->toString()));
+                return response()->json(Event::getAllEventsByFilter(NOW()->toString()));
             }
         }
     }

@@ -76,6 +76,8 @@ Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(func
 
     Route::get('/event', [EventController::class, 'list'])->name('collection_of_events');
 
+    Route::get('/event-filter', [EventController::class, 'filter'])->name('collection_of_events_by_filter');
+
     Route::post('/event', [EventController::class, 'create'])->name('create_event');
 
     Route::get('/event/{id}', [EventController::class, 'detail'])->name('detail_of_event');
