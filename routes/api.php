@@ -10,6 +10,7 @@ use App\Http\Controllers\ExerciseFileController;
 use App\Http\Controllers\ExerciseTaskController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RecordController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -135,6 +136,17 @@ Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(func
     Route::put('/exercise-task/{id}', [ExerciseTaskController::class, 'update'])->name('update_exercise_task');
 
     Route::delete('/exercise-task/{id}', [ExerciseTaskController::class, 'delete'])->name('delete_exercise_task');
+
+
+    Route::get('/tag', [TagController::class, 'list'])->name('collection_of_tags');
+
+    Route::post('/tag', [TagController::class, 'create'])->name('create_tag');
+
+    Route::get('/tag/{id}', [TagController::class, 'detail'])->name('detail_of_tag');
+
+    Route::put('/tag/{id}', [TagController::class, 'update'])->name('update_tag');
+
+    Route::delete('/tag/{id}', [TagController::class, 'delete'])->name('delete_tag');
 });
 
 Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {

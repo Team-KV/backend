@@ -37,5 +37,8 @@ return [
     'taskDoesntExistError' => 'Task doesn\'t exist.',
     'taskUpdateError' => 'Úkol se nepodařilo upravit.',
     'exerciseTaskDoesntExistError' => 'Evaluation of exercise doesn\'t exist.',
-    'exerciseTaskUpdateError' => 'Evaluation of exercise cannot be updated.'
+    'exerciseTaskUpdateError' => 'Evaluation of exercise cannot be updated.',
+    'tagCreateError' => 'Tag cannot be created.',
+    'tagDoesntExistError' => 'Tag doesn\'t exist.',
+    'tagUpdateError' => 'Tag cannot be updated.'
 ];

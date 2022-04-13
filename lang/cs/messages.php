@@ -37,5 +37,8 @@ return [
     'taskDoesntExistError' => 'Úkol neexistuje.',
     'taskUpdateError' => 'Úkol se nepodařilo upravit.',
     'exerciseTaskDoesntExistError' => 'Hodnocení cviku neexistuje.',
-    'exerciseTaskUpdateError' => 'Hodnocení cviku se nepodařilo upravit.'
+    'exerciseTaskUpdateError' => 'Hodnocení cviku se nepodařilo upravit.',
+    'tagCreateError' => 'Tag se nepodařilo vytvořit.',
+    'tagDoesntExistError' => 'Tag neexistuje.',
+    'tagUpdateError' => 'Tag se nepodařilo upravit.'
 ];
