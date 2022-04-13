@@ -181,8 +181,8 @@ class Client extends Model
         $progress = 0;
         $events = Event::getEventsByClientID($id);
         foreach($events as $event) {
-            $records = Record::getRecordsByEventID($event->id);
-            foreach($records as $record) {
+            $record = Record::getRecordByEventID($event->id);
+            if($record != null) {
                 $progress += $record->progress;
                 $graphData = new GraphData($event->start, $progress);
                 array_push($data, $graphData);
