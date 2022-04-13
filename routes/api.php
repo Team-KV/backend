@@ -53,6 +53,10 @@ Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(func
 
     Route::post('/client/{id}/attachment', [ClientController::class, 'uploadAttachments'])->name('upload_attachments_to_client');
 
+    Route::post('/client/{id}/attach-tags', [ClientController::class, 'attachTags'])->name('attach_tags_to_client');
+
+    Route::post('/client/{id}/detach-tag', [ClientController::class, 'detachTag'])->name('detach_tag_from_client');
+
 
     Route::get('/attachment/{id}', [AttachmentController::class, 'download'])->name('download_attachment');
 

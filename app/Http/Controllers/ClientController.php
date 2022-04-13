@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Attachment;
 use App\Models\Client;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -227,6 +228,61 @@ class ClientController extends Controller
         }
 
         return response()->json(['Attachments' => $uploaded, 'Count' => count($uploaded)]);
+    }
+
+    /**
+     * Returns response with client in JSON after attach tags
+     *
+     * @param $id
+     * @param Request $request
+     * @return Response|JsonResponse
+     */
+    public function attachTags($id, Request $request): Response|JsonResponse
+    {
+        $client = Client::getClientWithAllByID($id);
+        if ($client == null) {
+            return response(['message' => trans('messages.clientDoesntExistsError')], 404);
+        }
+
+        $params = $request->validate([
+            'tag_ids' => ['required', 'array']
+        ]);
+
+        foreach($params['tag_ids'] as $tag_id) {
+            if(Tag::getTagByID($tag_id) != null) {
+                $client->tags()->attach($tag_id);
+            }
+        }
+
+        return response()->json(['Client' => $client]);
+    }
+
+    /**
+     * Returns response with client in JSON after detach tag
+     *
+     * @param $id
+     * @param Request $request
+     * @return Response|JsonResponse
+     */
+    public function detachTag($id, Request $request): Response|JsonResponse
+    {
+        $client = Client::getClientWithAllByID($id);
+        if ($client == null) {
+            return response(['message' => trans('messages.clientDoesntExistsError')], 404);
+        }
+
+        $params = $request->validate([
+            'tag_id' => ['required', 'numeric']
+        ]);
+
+        if(Tag::getTagByID($params['tag_id']) != null) {
+            $client->tags()->attach($params['tag_id']);
+        }
+        else {
+            return response(['message' => trans('messages.tagDoesntExistError')], 404);
+        }
+
+        return response()->json(['Client' => $client]);
     }
 
     /**
