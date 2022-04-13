@@ -239,7 +239,7 @@ class ClientController extends Controller
      */
     public function attachTags($id, Request $request): Response|JsonResponse
     {
-        $client = Client::getClientWithAllByID($id);
+        $client = Client::getClientByID($id);
         if ($client == null) {
             return response(['message' => trans('messages.clientDoesntExistsError')], 404);
         }
@@ -254,7 +254,7 @@ class ClientController extends Controller
             }
         }
 
-        return response()->json(['Client' => $client]);
+        return response()->json(['Client' => Client::getClientWithAllByID($id)]);
     }
 
     /**
@@ -266,7 +266,7 @@ class ClientController extends Controller
      */
     public function detachTag($id, Request $request): Response|JsonResponse
     {
-        $client = Client::getClientWithAllByID($id);
+        $client = Client::getClientByID($id);
         if ($client == null) {
             return response(['message' => trans('messages.clientDoesntExistsError')], 404);
         }
@@ -276,13 +276,13 @@ class ClientController extends Controller
         ]);
 
         if(Tag::getTagByID($params['tag_id']) != null) {
-            $client->tags()->attach($params['tag_id']);
+            $client->tags()->detach($params['tag_id']);
         }
         else {
             return response(['message' => trans('messages.tagDoesntExistError')], 404);
         }
 
-        return response()->json(['Client' => $client]);
+        return response()->json(['Client' => Client::getClientWithAllByID($id)]);
     }
 
     /**
