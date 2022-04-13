@@ -20,6 +20,7 @@ return [
     'eventDoesntExistError' => 'Událost neexistuje.',
     'eventUpdateError' => 'Událost se nepodařilo upravit.',
     'recordCreateError' => 'Záznam se nepodařilo vytvořit.',
+    'recordAlreadyExistsError' => 'Záznam u této schůzky již existuje.',
     'recordDoesntExistError' => 'Záznam neexistuje.',
     'recordUpdateError' => 'Záznam se nepodařilo upravit.',
     'categoryCreateError' => 'Kategorii se nepodařilo vytvořit.',

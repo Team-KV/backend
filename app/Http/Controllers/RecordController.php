@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use App\Models\Record;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
@@ -11,17 +12,6 @@ use Illuminate\Http\Response;
 class RecordController extends Controller
 {
     /**
-     * Returns collection of records for specific event in JSON response
-     *
-     * @param $event_id
-     * @return JsonResponse
-     */
-    public function list($event_id): JsonResponse
-    {
-        return response()->json(Record::getRecordsByEventID($event_id));
-    }
-
-    /**
      * Returns response with created record object
      *
      * @param $event_id
@@ -30,6 +20,15 @@ class RecordController extends Controller
      */
     public function create($event_id, Request $request): Response|JsonResponse
     {
+        $event = Event::getEventWithAllByID($event_id);
+        if($event == null) {
+            return response(['message' => trans('messages.eventDoesntExistError')], 404);
+        }
+
+        if($event->record != null) {
+            return response(['message' => trans('messages.recordAlreadyExistsError')], 409);
+        }
+
         $params = $request->validate([
             'progress' => ['required', 'numeric'],
             'progress_note' => ['string', 'nullable'],

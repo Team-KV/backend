@@ -20,6 +20,7 @@ return [
     'eventDoesntExistError' => 'Event doesn\'t exist.',
     'eventUpdateError' => 'Event cannot be updated.',
     'recordCreateError' => 'Record cannot be created.',
+    'recordAlreadyExistsError' => 'Record in this event already exists.',
     'recordDoesntExistError' => 'Record doesn\'t exist.',
     'recordUpdateError' => 'Record cannot be updated.',
     'categoryCreateError' => 'Category cannot be created.',

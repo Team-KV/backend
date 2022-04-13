@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 
@@ -51,7 +52,7 @@ class Event extends Model
         return self::with('eventType')->
             with('client')->
             with('staff')->
-            with('records')->
+            with('record')->
             where('id', $id)->
             first();
     }
@@ -185,8 +186,8 @@ class Event extends Model
         return $this->belongsTo(EventType::class);
     }
 
-    public function records(): HasMany
+    public function record(): HasOne
     {
-        return $this->hasMany(Record::class);
+        return $this->hasOne(Record::class);
     }
 }

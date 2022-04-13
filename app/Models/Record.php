@@ -37,14 +37,14 @@ class Record extends Model
     }
 
     /**
-     * Returns collection of records for specific event
+     * Returns record for specific event
      *
      * @param $event_id
-     * @return Collection
+     * @return Record|null
      */
-    public static function getRecordsByEventID($event_id): Collection
+    public static function getRecordByEventID($event_id): Record|null
     {
-        return self::all()->where('event_id', $event_id);
+        return self::all()->where('event_id', $event_id)->first();
     }
 
     /**
