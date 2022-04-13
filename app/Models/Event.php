@@ -53,6 +53,7 @@ class Event extends Model
             with('client')->
             with('staff')->
             with('record')->
+            with('task')->
             where('id', $id)->
             first();
     }
@@ -190,5 +191,10 @@ class Event extends Model
     public function record(): HasOne
     {
         return $this->hasOne(Record::class);
+    }
+
+    public function task(): HasOne
+    {
+        return $this->hasOne(Task::class);
     }
 }
