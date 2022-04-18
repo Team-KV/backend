@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Mail\CreateUserEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,6 +10,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -96,7 +98,7 @@ class User extends Authenticatable
             return false;
         }
 
-        //TODO: Send email with credentials
+        Mail::to($userParams['email'])->send(new CreateUserEmail($userParams['email'], $password));
 
         return true;
     }
