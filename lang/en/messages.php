@@ -7,6 +7,7 @@ return [
     'clientDoesntExistsError' => 'Client doesn\'t exist.',
     'clientPINError' => 'Personal information number is not valid.',
     'clientEmailError' => 'Client\'s email is not set.',
+    'clientParentError' => 'Client is connected to another client.',
     'clientUpdateError' => 'Client cannot be updated. Please try it again.',
     'userCreateError' => 'User for client cannot be created.',
     'eventTypeCreateError' => 'Event type cannot be created.',

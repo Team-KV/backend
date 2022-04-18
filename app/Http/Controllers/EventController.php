@@ -141,16 +141,7 @@ class EventController extends Controller
             return response(['message' => trans('messages.eventDoesntExistError')], 404);
         }
 
-        if($event->task != null) {
-            Task::removeExercisesFromTask($event->task->id);
-            $event->task->delete();
-        }
-
-        if($event->record != null) {
-            $event->record->delete();
-        }
-
-        $event->delete();
+        Event::deleteEvent($event);
 
         return response('', 204);
     }

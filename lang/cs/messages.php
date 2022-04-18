@@ -7,6 +7,7 @@ return [
     'clientDoesntExistsError' => 'Klient neexistuje.',
     'clientPINError' => 'Rodné číslo nené validní.',
     'clientEmailError' => 'Email klienta není nastaven.',
+    'clientParentError' => 'Klient je vázán na jiného klienta.',
     'clientUpdateError' => 'Klienta se nepodařilo upravit.',
     'userCreateError' => 'Uživatele pro klienta se nepodařilo vytvořit.',
     'eventTypeCreateError' => 'Typ události se nepodařilo vytvořit.',

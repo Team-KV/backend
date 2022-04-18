@@ -109,17 +109,6 @@ class Client extends Model
     }
 
     /**
-     * Deletes client by ID
-     *
-     * @param $id
-     * @return void
-     */
-    public static function deleteClientByID($id): void
-    {
-        self::all()->where('id', $id)->first()->delete();
-    }
-
-    /**
      * Verify if PIN is valid for Czech republic
      *
      * @param String $pin

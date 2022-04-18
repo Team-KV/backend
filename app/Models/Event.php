@@ -145,6 +145,26 @@ class Event extends Model
     }
 
     /**
+     * Deletes event with all attached objects
+     *
+     * @param Event $event
+     * @return void
+     */
+    public static function deleteEvent(Event $event): void
+    {
+        if($event->task != null) {
+            Task::removeExercisesFromTask($event->task->id);
+            $event->task->delete();
+        }
+
+        if($event->record != null) {
+            $event->record->delete();
+        }
+
+        $event->delete();
+    }
+
+    /**
      * Checks if there is free time in calendar for specific staff
      *
      * @param $staff_id

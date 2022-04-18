@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Attachment;
 use App\Models\Client;
+use App\Models\Event;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
@@ -161,13 +162,26 @@ class ClientController extends Controller
             return response(['message' => trans('messages.clientDoesntExistsError')], 404);
         }
 
+        if(count($client->children) != 0) {
+            return response(['message' => trans('messages.clientParentError')], 409);
+        }
+
         Attachment::removeFilesByClientID($id);
 
         Storage::delete(Storage::files('clients/' . $client->id));
         Storage::deleteDirectory('clients/' . $client->id);
-        //TODO: Delete client's objects (events, attachments, ...)
 
-        Client::deleteClientByID($id);
+        $client->tags()->detach();
+
+        foreach($client->events as $event) {
+            Event::deleteEvent($event);
+        }
+
+        if($client->user != null) {
+            $client->user->delete();
+        }
+
+        $client->delete();
 
         return response('', 204);
     }
