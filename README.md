@@ -14,16 +14,20 @@ For running this project locally you need to have installed Docker.
 
 ## Database seeding
 
-1. Admin login: sail artisan db:seed
+sail artisan db:seed
 
 ## Login credentials
 
-Admin login: admin@test.com, admin
+Admin login: admin@test.com, admin  
 Client login: client@test.com, client
 
 ## Usage
 
 After installation, you can use API on starting address http://localhost/api/.
+
+## Mailhog
+
+Mailhog for reading emails from system is available here: http://localhost:8025
 
 ## API description
 
