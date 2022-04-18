@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Task;
 use DateTime;
 use Exception;
 use Illuminate\Database\QueryException;
@@ -140,7 +141,14 @@ class EventController extends Controller
             return response(['message' => trans('messages.eventDoesntExistError')], 404);
         }
 
-        //TODO: Remove attached objects
+        if($event->task != null) {
+            Task::removeExercisesFromTask($event->task->id);
+            $event->task->delete();
+        }
+
+        if($event->record != null) {
+            $event->record->delete();
+        }
 
         $event->delete();
 

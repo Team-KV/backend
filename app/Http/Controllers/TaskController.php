@@ -134,7 +134,7 @@ class TaskController extends Controller
             return response(['message' => trans('messages.taskDoesntExistError')], 404);
         }
 
-        $task->exercises()->detach();
+        Task::removeExercisesFromTask($id);
 
         $task->delete();
 

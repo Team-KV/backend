@@ -75,6 +75,17 @@ class Task extends Model
         }
     }
 
+    /**
+     * Removes exercises from task by ID
+     *
+     * @param $id
+     * @return void
+     */
+    public static function removeExercisesFromTask($id): void
+    {
+        self::getTaskByID($id)->exercises()->detach();
+    }
+
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
