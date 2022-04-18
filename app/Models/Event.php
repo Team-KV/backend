@@ -157,16 +157,16 @@ class Event extends Model
         if($event_id == null) {
             $events = DB::select('SELECT * FROM events
                                     WHERE events.staff_id = ?
-                                      AND ((events.start <= ? AND events.end >= ?)
-                                               OR (events.start <= ? AND events.end >= ?)
+                                      AND ((events.start <= ? AND events.end > ?)
+                                               OR (events.start < ? AND events.end >= ?)
                                                OR (events.start >= ? AND events.end <= ?))',
                 [$staff_id, $start, $start, $end, $end, $start, $end]);
         }
         else {
             $events = DB::select('SELECT * FROM events
                                     WHERE events.staff_id = ? AND events.id <> ?
-                                      AND ((events.start <= ? AND events.end >= ?)
-                                               OR (events.start <= ? AND events.end >= ?)
+                                      AND ((events.start <= ? AND events.end > ?)
+                                               OR (events.start < ? AND events.end >= ?)
                                                OR (events.start >= ? AND events.end <= ?))',
                 [$staff_id, $event_id, $start, $start, $end, $end, $start, $end]);
         }
