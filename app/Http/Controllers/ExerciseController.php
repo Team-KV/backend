@@ -20,7 +20,7 @@ class ExerciseController extends Controller
      */
     public function list(): JsonResponse
     {
-        return response()->json(Exercise::getAllExercises());
+        return $this->sendData(Exercise::getAllExercises());
     }
 
     /**
@@ -39,13 +39,13 @@ class ExerciseController extends Controller
         ]);
 
         if(isset($params['category_id']) && $params['category_id'] != null && Category::getCategoryByID($params['category_id']) == null) {
-            return response(['message' => trans('messages.categoryDoesntExistError')], 404);
+            return $this->sendNotFound('messages.categoryDoesntExistError');
         }
 
         try {
             $exercise = Exercise::create($params);
         } catch (QueryException) {
-            return response(['message' => trans('messages.exerciseCreateError')], 409);
+            return $this->sendInternalError('messages.exerciseCreateError');
         }
 
         Storage::makeDirectory('exercises/'.$exercise->id);
@@ -56,7 +56,7 @@ class ExerciseController extends Controller
             $uploaded = self::uploadFilesToExercise($exercise, $files);
         }
 
-        return response()->json(['Exercise' => $exercise, 'ExerciseFiles' => $uploaded, 'Count' => count($uploaded)]);
+        return $this->sendData(['Exercise' => $exercise, 'ExerciseFiles' => $uploaded, 'Count' => count($uploaded)]);
     }
 
     /**
@@ -69,10 +69,10 @@ class ExerciseController extends Controller
     {
         $exercise = Exercise::getExerciseWithFilesByID($id);
         if ($exercise == null) {
-            return response(['message' => trans('messages.exerciseDoesntExistError')], 404);
+            return $this->sendNotFound('messages.exerciseDoesntExistError');
         }
 
-        return response()->json(['Exercise' => $exercise]);
+        return $this->sendData(['Exercise' => $exercise]);
     }
 
     /**
@@ -86,7 +86,7 @@ class ExerciseController extends Controller
     {
         $exercise = Exercise::getExerciseByID($id);
         if ($exercise == null) {
-            return response(['message' => trans('messages.exerciseDoesntExistError')], 404);
+            return $this->sendNotFound('messages.exerciseDoesntExistError');
         }
 
         $params = $request->validate([
@@ -97,13 +97,13 @@ class ExerciseController extends Controller
         ]);
 
         if(isset($params['category_id']) && $params['category_id'] != null && Category::getCategoryByID($params['category_id']) == null) {
-            return response(['message' => trans('messages.categoryDoesntExistError')], 404);
+            return $this->sendNotFound('messages.categoryDoesntExistError');
         }
 
         if (Exercise::updateExercise($exercise, $params)) {
-            return response()->json(['Exercise' => $exercise]);
+            return $this->sendData(['Exercise' => $exercise]);
         } else {
-            return response(['message' => trans('messages.exerciseUpdateError')], 409);
+            return $this->sendInternalError('messages.exerciseUpdateError');
         }
     }
 
@@ -117,7 +117,7 @@ class ExerciseController extends Controller
     {
         $exercise = Exercise::getExerciseByID($id);
         if ($exercise == null) {
-            return response(['message' => trans('messages.exerciseDoesntExistError')], 404);
+            return $this->sendNotFound('messages.exerciseDoesntExistError');
         }
 
         ExerciseFile::removeFilesByExerciseID($id);
@@ -127,7 +127,7 @@ class ExerciseController extends Controller
 
         $exercise->delete();
 
-        return response('', 204);
+        return $this->sendNoContent();
     }
 
     /**
@@ -141,7 +141,7 @@ class ExerciseController extends Controller
     {
         $exercise = Exercise::getExerciseByID($id);
         if ($exercise == null) {
-            return response(['message' => trans('messages.exerciseDoesntExistError')], 404);
+            return $this->sendNotFound('messages.exerciseDoesntExistError');
         }
 
         $files = $request->file('files');
@@ -150,7 +150,7 @@ class ExerciseController extends Controller
             $uploaded = self::uploadFilesToExercise($exercise, $files);
         }
 
-        return response()->json(['ExerciseFiles' => $uploaded, 'Count' => count($uploaded)]);
+        return $this->sendData(['ExerciseFiles' => $uploaded, 'Count' => count($uploaded)]);
     }
 
     /**
