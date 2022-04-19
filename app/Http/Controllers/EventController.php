@@ -123,7 +123,7 @@ class EventController extends Controller
             return response(['message' => trans('messages.eventDateFormatError')], 409);
         }
 
-        if(!Event::checkFreeTime($params['staff_id'], $params['start'], $params['end'])) {
+        if(!Event::checkFreeTime($params['staff_id'], $params['start'], $params['end'], $event->id)) {
             return response(['message' => trans('messages.eventDateTimeError')], 409);
         }
 
