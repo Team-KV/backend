@@ -55,4 +55,17 @@ class Controller extends BaseController
     {
         return response(['message' => trans($message)], 409);
     }
+
+    /**
+     * Returns custom response with content, code and data
+     *
+     * @param string $content
+     * @param int $code
+     * @param $data
+     * @return JsonResponse
+     */
+    public function sendResponse(string $content, int $code, $data): JsonResponse
+    {
+        return response($content, $code)->json($data);
+    }
 }
