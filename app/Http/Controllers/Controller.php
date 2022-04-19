@@ -57,6 +57,17 @@ class Controller extends BaseController
     }
 
     /**
+     * Returns response with internal server error message
+     *
+     * @param string $message
+     * @return Response
+     */
+    public function sendInternalError(string $message): Response
+    {
+        return response(['message' => trans($message)], 500);
+    }
+
+    /**
      * Returns custom response with content, code and data
      *
      * @param string $content

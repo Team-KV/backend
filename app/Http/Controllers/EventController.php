@@ -20,7 +20,7 @@ class EventController extends Controller
      */
     public function list(): JsonResponse
     {
-        return response()->json(Event::getAllEvents());
+        return $this->sendData(Event::getAllEvents());
     }
 
     /**
@@ -33,15 +33,15 @@ class EventController extends Controller
     {
         if($request->has('period')) {
             if ($request->has('datetime')) {
-                return response()->json(Event::getAllEventsByFilter($request->query('datetime'), $request->query('period')));
+                return $this->sendData(Event::getAllEventsByFilter($request->query('datetime'), $request->query('period')));
             } else {
-                return response()->json(Event::getAllEventsByFilter(NOW()->toString(), $request->query('period')));
+                return $this->sendData(Event::getAllEventsByFilter(NOW()->toString(), $request->query('period')));
             }
         } else {
             if ($request->has('datetime')) {
-                return response()->json(Event::getAllEventsByFilter($request->query('datetime')));
+                return $this->sendData(Event::getAllEventsByFilter($request->query('datetime')));
             } else {
-                return response()->json(Event::getAllEventsByFilter(NOW()->toString()));
+                return $this->sendData(Event::getAllEventsByFilter(NOW()->toString()));
             }
         }
     }
@@ -68,20 +68,20 @@ class EventController extends Controller
             $params['start'] = new DateTime($params['start']);
             $params['end'] = new DateTime($params['end']);
         } catch(Exception) {
-            return response(['message' => trans('messages.eventDateFormatError')], 409);
+            return $this->sendConflict('messages.eventDateFormatError');
         }
 
         if(!Event::checkFreeTime($params['staff_id'], $params['start'], $params['end'])) {
-            return response(['message' => trans('messages.eventDateTimeError')], 409);
+            return $this->sendConflict('messages.eventDateTimeError');
         }
 
         try {
             $event = Event::create($params);
         } catch (QueryException) {
-            return response(['message' => trans('messages.eventCreateError')], 409);
+            return $this->sendInternalError('messages.eventCreateError');
         }
 
-        return response()->json(['Event' => $event]);
+        return $this->sendData(['Event' => $event]);
     }
 
     /**
@@ -94,16 +94,24 @@ class EventController extends Controller
     {
         $event = Event::getEventWithAllByID($id);
         if($event == null) {
-            return response(['message' => trans('messages.eventDoesntExistError')], 404);
+            return $this->sendNotFound('messages.eventDoesntExistError');
         }
-        return response()->json(['Event' => $event]);
+
+        return $this->sendData(['Event' => $event]);
     }
 
-    public function update($id, Request $request)
+    /**
+     * Returns response with updated event in JSON
+     *
+     * @param $id
+     * @param Request $request
+     * @return Response|JsonResponse
+     */
+    public function update($id, Request $request): Response|JsonResponse
     {
         $event = Event::getEventByID($id);
         if($event == null) {
-            return response(['message' => trans('messages.eventDoesntExistError')], 404);
+            return $this->sendNotFound('messages.eventDoesntExistError');
         }
 
         $params = $request->validate([
@@ -120,29 +128,36 @@ class EventController extends Controller
             $params['start'] = new DateTime($params['start']);
             $params['end'] = new DateTime($params['end']);
         } catch(Exception) {
-            return response(['message' => trans('messages.eventDateFormatError')], 409);
+            return $this->sendConflict('messages.eventDateFormatError');
         }
 
         if(!Event::checkFreeTime($params['staff_id'], $params['start'], $params['end'], $event->id)) {
-            return response(['message' => trans('messages.eventDateTimeError')], 409);
+            return $this->sendConflict('messages.eventDateTimeError');
         }
 
         if(Event::updateEvent($event, $params)) {
-            return response()->json(['Event' => $event]);
+            return $this->sendData(['Event' => $event]);
         }
         else {
-            return response(['message' => trans('messages.eventUpdateError')], 409);
+            return $this->sendInternalError('messages.eventUpdateError');
         }
     }
 
-    public function delete($id) {
+    /**
+     * Returns response after success delete
+     *
+     * @param $id
+     * @return Response
+     */
+    public function delete($id): Response
+    {
         $event = Event::getEventByID($id);
         if($event == null) {
-            return response(['message' => trans('messages.eventDoesntExistError')], 404);
+            return $this->sendNotFound('messages.eventDoesntExistError');
         }
 
         Event::deleteEvent($event);
 
-        return response('', 204);
+        return $this->sendNoContent();
     }
 }
