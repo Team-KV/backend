@@ -35,6 +35,17 @@ class Controller extends BaseController
     }
 
     /**
+     * Returns response with unauthorized message
+     *
+     * @param string $message
+     * @return Response
+     */
+    public function sendUnauthorized(string $message): Response
+    {
+        return response(['message' => trans($message)], 401);
+    }
+
+    /**
      * Returns response with not found message
      *
      * @param string $message

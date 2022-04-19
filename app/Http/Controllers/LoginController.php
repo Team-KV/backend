@@ -25,18 +25,22 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             if(Auth::user()->role === 1) {
-                return response()->json([
-                    'Token' => Auth::user()->createToken('auth_token', ['admin'])->plainTextToken
-                ]);
+                return $this->sendData(
+                    [
+                        'Token' => Auth::user()->createToken('auth_token', ['admin'])->plainTextToken
+                    ]
+                );
             }
             else {
-                return response()->json([
-                    'Token' => Auth::user()->createToken('auth_token', ['client'])->plainTextToken
-                ]);
+                return $this->sendData(
+                    [
+                        'Token' => Auth::user()->createToken('auth_token', ['client'])->plainTextToken
+                    ]
+                );
             }
         }
 
-        return response(['message' => trans('messages.badCredentials')], 401);
+        return $this->sendUnauthorized('messages.badCredentials');
     }
 
     /**
@@ -46,9 +50,11 @@ class LoginController extends Controller
      */
     public function info(): JsonResponse
     {
-        return response()->json([
-            'User' => User::getUserByID(Auth::id())
-        ]);
+        return $this->sendData(
+            [
+                'User' => User::getUserByID(Auth::id())
+            ]
+        );
     }
 
     /**
@@ -62,6 +68,6 @@ class LoginController extends Controller
             $token->delete();
         });
 
-        return response( '', 204);
+        return $this->sendNoContent();
     }
 }
