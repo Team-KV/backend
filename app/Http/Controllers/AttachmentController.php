@@ -20,7 +20,7 @@ class AttachmentController extends Controller
     {
         $attachment = Attachment::getFileByID($id);
         if($attachment == null) {
-            return response(['message' => trans('messages.fileDoesntExistError')], 404);
+            $this->sendNotFound('messages.fileDoesntExistError');
         }
 
         $path = 'clients/' . $attachment->client_id . '/' . $attachment->file_name;
@@ -28,7 +28,7 @@ class AttachmentController extends Controller
             return Storage::download($path);
         }
 
-        return response(['message' => trans('messages.fileDoesntExistError')], 404);
+        return $this->sendNotFound('messages.fileDoesntExistError');
     }
 
     /**
@@ -41,13 +41,13 @@ class AttachmentController extends Controller
     {
         $attachment = Attachment::getFileByID($id);
         if($attachment == null) {
-            return response(['message' => trans('messages.fileDoesntExistError')], 404);
+            return $this->sendNotFound('messages.fileDoesntExistError');
         }
 
         Storage::delete('clients/' . $attachment->client_id . '/' . $attachment->file_name);
 
         $attachment->delete();
 
-        return response('', 204);
+        return $this->sendNoContent();
     }
 }
