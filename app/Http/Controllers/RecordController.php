@@ -22,11 +22,11 @@ class RecordController extends Controller
     {
         $event = Event::getEventWithAllByID($event_id);
         if($event == null) {
-            return response(['message' => trans('messages.eventDoesntExistError')], 404);
+            return $this->sendNotFound('messages.eventDoesntExistError');
         }
 
         if($event->record != null) {
-            return response(['message' => trans('messages.recordAlreadyExistsError')], 409);
+            return $this->sendConflict('messages.recordAlreadyExistsError');
         }
 
         $params = $request->validate([
@@ -40,10 +40,10 @@ class RecordController extends Controller
         try {
             $record = Record::create($params);
         } catch (QueryException) {
-            return response(['message' => trans('messages.recordCreateError')], 409);
+            return $this->sendInternalError('messages.recordCreateError');
         }
 
-        return response()->json(['Record' => $record]);
+        return $this->sendData(['Record' => $record]);
     }
 
     /**
@@ -56,9 +56,10 @@ class RecordController extends Controller
     {
         $record = Record::getRecordByID($id);
         if($record == null) {
-            return response(['message' => trans('messages.recordDoesntExistError')], 404);
+            return $this->sendNotFound('messages.recordDoesntExistError');
         }
-        return response()->json(['Record' => $record]);
+
+        return $this->sendData(['Record' => $record]);
     }
 
     /**
@@ -72,7 +73,7 @@ class RecordController extends Controller
     {
         $record = Record::getRecordByID($id);
         if($record == null) {
-            return response(['message' => trans('messages.recordDoesntExistError')], 404);
+            return $this->sendNotFound('messages.recordDoesntExistError');
         }
 
         $params = $request->validate([
@@ -83,10 +84,10 @@ class RecordController extends Controller
         ]);
 
         if(Record::updateRecord($record, $params)) {
-            return response()->json(['Record' => $record]);
+            return $this->sendData(['Record' => $record]);
         }
         else {
-            return response(['message' => trans('messages.recordUpdateError')], 409);
+            return $this->sendInternalError('messages.recordUpdateError');
         }
     }
 
@@ -100,11 +101,11 @@ class RecordController extends Controller
     {
         $record = Record::getRecordByID($id);
         if($record == null) {
-            return response(['message' => trans('messages.recordDoesntExistError')], 404);
+            return $this->sendNotFound('messages.recordDoesntExistError');
         }
 
         $record->delete();
 
-        return response('', 204);
+        return $this->sendNoContent();
     }
 }
