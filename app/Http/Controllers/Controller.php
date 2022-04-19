@@ -35,6 +35,17 @@ class Controller extends BaseController
     }
 
     /**
+     * Returns response with bad request message
+     *
+     * @param string $message
+     * @return Response
+     */
+    public function sendBadRequest(string $message): Response
+    {
+        return response(['message' => trans($message)], 400);
+    }
+
+    /**
      * Returns response with unauthorized message
      *
      * @param string $message

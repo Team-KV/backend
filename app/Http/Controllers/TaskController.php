@@ -11,8 +11,6 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Js;
-use PHPUnit\Util\Json;
 
 class TaskController extends Controller
 {
@@ -27,12 +25,13 @@ class TaskController extends Controller
         if($request->has('event-id')) {
             $event = Event::getEventByID($request->query('event-id'));
             if($event == null) {
-                return response(['message' => trans('messages.eventDoesntExistError')], 404);
+                return $this->sendNotFound('messages.eventDoesntExistError');
             }
-            return response()->json(Task::getAllTasksByEventID($request->query('event-id')));
+
+            return $this->sendData(Task::getAllTasksByEventID($request->query('event-id')));
         }
         else {
-            return response(['message' => trans('messages.missingEventIdParameterError')], 409);
+            return $this->sendBadRequest('messages.missingEventIdParameterError');
         }
     }
 
@@ -52,20 +51,20 @@ class TaskController extends Controller
         ]);
 
         if(Client::getClientByID($params['client_id']) == null) {
-            return response(['message' => trans('messages.clientDoesntExistsError')], 404);
+            return $this->sendNotFound('messages.clientDoesntExistsError');
         }
 
         if(Event::getEventByID($params['event_id']) == null) {
-            return response(['message' => trans('messages.eventDoesntExistError')], 404);
+            return $this->sendNotFound('messages.eventDoesntExistError');
         }
 
         try {
             $task = Task::create($params);
         } catch (QueryException) {
-            return response(['message' => trans('messages.taskCreateError')], 409);
+            return $this->sendInternalError('messages.taskCreateError');
         }
 
-        return response()->json(['Task' => $task]);
+        return $this->sendData(['Task' => $task]);
     }
 
     /**
@@ -78,10 +77,10 @@ class TaskController extends Controller
     {
         $task = Task::getTaskWithExercisesByID($id);
         if($task == null) {
-            return response(['message' => trans('messages.taskDoesntExistError')], 404);
+            return $this->sendNotFound('messages.taskDoesntExistError');
         }
 
-        return response()->json(['Task' => $task]);
+        return $this->sendData(['Task' => $task]);
     }
 
     /**
@@ -95,7 +94,7 @@ class TaskController extends Controller
     {
         $task = Task::getTaskByID($id);
         if($task == null) {
-            return response(['message' => trans('messages.taskDoesntExistError')], 404);
+            return $this->sendNotFound('messages.taskDoesntExistError');
         }
 
         $params = $request->validate([
@@ -106,18 +105,18 @@ class TaskController extends Controller
         ]);
 
         if(Client::getClientByID($params['client_id']) == null) {
-            return response(['message' => trans('messages.clientDoesntExistsError')], 404);
+            return $this->sendNotFound('messages.clientDoesntExistsError');
         }
 
         if(Event::getEventByID($params['event_id']) == null) {
-            return response(['message' => trans('messages.eventDoesntExistError')], 404);
+            return $this->sendNotFound('messages.eventDoesntExistError');
         }
 
         if(Task::updateTask($task, $params)) {
-            return response()->json(['Task' => $task]);
+            return $this->sendData(['Task' => $task]);
         }
         else {
-            return response(['message' => trans('messages.taskUpdateError')], 409);
+            return $this->sendInternalError('messages.taskUpdateError');
         }
     }
 
@@ -131,14 +130,14 @@ class TaskController extends Controller
     {
         $task = Task::getTaskByID($id);
         if($task == null) {
-            return response(['message' => trans('messages.taskDoesntExistError')], 404);
+            return $this->sendNotFound('messages.taskDoesntExistError');
         }
 
         Task::removeExercisesFromTask($id);
 
         $task->delete();
 
-        return response('', 204);
+        return $this->sendNoContent();
     }
 
     /**
@@ -151,14 +150,14 @@ class TaskController extends Controller
     {
         $task = Task::getTaskByID($id);
         if($task == null) {
-            return response(['message' => trans('messages.taskDoesntExistError')], 404);
+            return $this->sendNotFound('messages.taskDoesntExistError');
         }
 
         $task->is_active = !$task->is_active;
 
         $task->save();
 
-        return response()->json(['Task' => $task]);
+        return $this->sendData(['Task' => $task]);
     }
 
     /**
@@ -172,7 +171,7 @@ class TaskController extends Controller
     {
         $task = Task::getTaskByID($id);
         if($task == null) {
-            return response(['message' => trans('messages.taskDoesntExistError')], 404);
+            return $this->sendNotFound('messages.taskDoesntExistError');
         }
 
         $params = $request->validate([
@@ -193,6 +192,6 @@ class TaskController extends Controller
             }
         }
 
-        return response()->json(['ExerciseTasks' => ExerciseTask::getExerciseTasksByTaskID($id)]);
+        return $this->sendData(['ExerciseTasks' => ExerciseTask::getExerciseTasksByTaskID($id)]);
     }
 }
