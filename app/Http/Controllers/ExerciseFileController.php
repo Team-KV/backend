@@ -20,7 +20,7 @@ class ExerciseFileController extends Controller
     {
         $exerciseFile = ExerciseFile::getFileByID($id);
         if($exerciseFile == null) {
-            return response(['message' => trans('messages.fileDoesntExistError')], 404);
+            return $this->sendNotFound('messages.fileDoesntExistError');
         }
 
         $path = 'exercises/' . $exerciseFile->exercise_id . '/' . $exerciseFile->file_name;
@@ -28,7 +28,7 @@ class ExerciseFileController extends Controller
             return Storage::download($path);
         }
 
-        return response(['message' => trans('messages.fileDoesntExistError')], 404);
+        return $this->sendNotFound('messages.fileDoesntExistError');
     }
 
     /**
@@ -41,13 +41,13 @@ class ExerciseFileController extends Controller
     {
         $exerciseFile = ExerciseFile::getFileByID($id);
         if($exerciseFile == null) {
-            return response(['message' => trans('messages.fileDoesntExistError')], 404);
+            return $this->sendNotFound('messages.fileDoesntExistError');
         }
 
         Storage::delete('exercises/' . $exerciseFile->exercise_id . '/' . $exerciseFile->file_name);
 
         $exerciseFile->delete();
 
-        return response('', 204);
+        return $this->sendNoContent();
     }
 }
