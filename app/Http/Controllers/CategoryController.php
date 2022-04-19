@@ -36,7 +36,7 @@ class CategoryController extends Controller
         try {
             $category = Category::create($params);
         } catch (QueryException) {
-            return $this->sendConflict('messages.categoryCreateError');
+            return $this->sendInternalError('messages.categoryCreateError');
         }
 
         return $this->sendData(['Category' => $category]);
@@ -80,7 +80,7 @@ class CategoryController extends Controller
         if (Category::updateCategory($category, $params)) {
             return $this->sendData(['Category' => $category]);
         } else {
-            return $this->sendConflict('messages.categoryUpdateError');
+            return $this->sendInternalError('messages.categoryUpdateError');
         }
     }
 

@@ -69,14 +69,14 @@ class ClientController extends Controller
         try {
             $client = Client::create($params);
         } catch (QueryException) {
-            return $this->sendConflict('messages.clientCreateError');
+            return $this->sendInternalError('messages.clientCreateError');
         }
 
         Storage::makeDirectory('clients/' . $client->id);
 
-        if (isset($params['contact_email']) && $params['contact_email'] != "" && $params['contact_email'] != null) {
-            if (!User::createUser($params['contact_email'], $client->id)) {
-                return $this->sendResponse('', 409, ['message' => trans('messages.userCreateError'), 'Client' => $client]);
+        if(isset($params['contact_email']) && $params['contact_email'] != "" && $params['contact_email'] != null) {
+            if(!User::createUser($params['contact_email'], $client->id)) {
+                return $this->sendResponse('', 500, ['message' => trans('messages.userCreateError'), 'Client' => $client]);
             }
         }
 
@@ -144,7 +144,7 @@ class ClientController extends Controller
         if (Client::updateClientByID($id, $params)) {
             return $this->sendData(['Client' => Client::getClientWithAllByID($id)]);
         } else {
-            return $this->sendConflict('messages.clientUpdateError');
+            return $this->sendInternalError('messages.clientUpdateError');
         }
     }
 
@@ -197,7 +197,7 @@ class ClientController extends Controller
         if ($client != null) {
             if ($client->contact_email != '' && $client->contact_email != null) {
                 if (!User::createUser($client->contact_email, $client->id)) {
-                    return $this->sendResponse('', 409, ['message' => trans('messages.userCreateError'), 'Client' => $client]);
+                    return $this->sendResponse('', 500, ['message' => trans('messages.userCreateError'), 'Client' => $client]);
                 }
             } else {
                 return $this->sendConflict('messages.clientEmailError');
