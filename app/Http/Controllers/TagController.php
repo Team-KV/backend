@@ -17,7 +17,7 @@ class TagController extends Controller
      */
     public function list(): JsonResponse
     {
-        return response()->json(Tag::getListOfTags());
+        return $this->sendData(Tag::getListOfTags());
     }
 
     /**
@@ -34,10 +34,10 @@ class TagController extends Controller
         try {
             $tag = Tag::create($params);
         } catch (QueryException) {
-            return response(['message' => trans('messages.tagCreateError')], 409);
+            return $this->sendInternalError('messages.tagCreateError');
         }
 
-        return response()->json(['Tag' => $tag]);
+        return $this->sendData(['Tag' => $tag]);
     }
 
     /**
@@ -50,10 +50,10 @@ class TagController extends Controller
     {
         $tag = Tag::getTagByID($id);
         if($tag == null) {
-            return response(['message' => trans('messages.tagDoesntExistError')], 404);
+            return $this->sendNotFound('messages.tagDoesntExistError');
         }
 
-        return response()->json(['Tag' => $tag]);
+        return $this->sendData(['Tag' => $tag]);
     }
 
     /**
@@ -67,7 +67,7 @@ class TagController extends Controller
     {
         $tag = Tag::getTagByID($id);
         if($tag == null) {
-            return response(['message' => trans('messages.tagDoesntExistError')], 404);
+            return $this->sendNotFound('messages.tagDoesntExistError');
         }
 
         $params = $request->validate([
@@ -76,10 +76,10 @@ class TagController extends Controller
         ]);
 
         if(Tag::updateTag($tag, $params)) {
-            return response()->json(['Tag' => $tag]);
+            return $this->sendData(['Tag' => $tag]);
         }
         else {
-            return response(['message' => trans('messages.tagUpdateError')], 409);
+            return $this->sendInternalError('messages.tagUpdateError');
         }
     }
 
@@ -93,13 +93,13 @@ class TagController extends Controller
     {
         $tag = Tag::getTagByID($id);
         if($tag == null) {
-            return response(['message' => trans('messages.tagDoesntExistError')], 404);
+            return $this->sendNotFound('messages.tagDoesntExistError');
         }
 
         $tag->clients()->detach();
 
         $tag->delete();
 
-        return response('', 204);
+        return $this->sendNoContent();
     }
 }
