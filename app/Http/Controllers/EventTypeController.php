@@ -17,7 +17,7 @@ class EventTypeController extends Controller
      */
     public function list(): JsonResponse
     {
-        return response()->json(EventType::getListOfTypes());
+        return $this->sendData(EventType::getListOfTypes());
     }
 
     /**
@@ -33,16 +33,16 @@ class EventTypeController extends Controller
         ]);
 
         if(EventType::getEventTypeByName($params['name']) != null) {
-            return response(['message' => trans('messages.eventTypeAlreadyExistsError')], 409);
+            return $this->sendConflict('messages.eventTypeAlreadyExistsError');
         }
 
         try {
             $eventType = EventType::create($params);
         } catch (QueryException) {
-            return response(['message' => trans('messages.eventTypeCreateError')], 409);
+            return $this->sendInternalError('messages.eventTypeCreateError');
         }
 
-        return response()->json(['EventType' => $eventType]);
+        return $this->sendData(['EventType' => $eventType]);
     }
 
     /**
@@ -55,9 +55,10 @@ class EventTypeController extends Controller
     {
         $eventType = EventType::getEventTypeByID($id);
         if($eventType == null) {
-            return response(['message' => trans('messages.eventTypeDoesntExistError')], 404);
+            return $this->sendNotFound('messages.eventTypeDoesntExistError');
         }
-        return response()->json(['EventType' => $eventType]);
+
+        return $this->sendData(['EventType' => $eventType]);
     }
 
     /**
@@ -71,7 +72,7 @@ class EventTypeController extends Controller
     {
         $eventType = EventType::getEventTypeByID($id);
         if($eventType == null) {
-            return response(['message' => trans('messages.eventTypeDoesntExistError')], 404);
+            return $this->sendNotFound('messages.eventTypeDoesntExistError');
         }
 
         $params = $request->validate([
@@ -79,31 +80,38 @@ class EventTypeController extends Controller
         ]);
 
         if(EventType::getEventTypeByName($params['name']) != null) {
-            return response(['message' => trans('messages.eventTypeAlreadyExistsError')], 409);
+            return $this->sendConflict('messages.eventTypeAlreadyExistsError');
         }
 
         if(EventType::updateEventType($eventType, $params)) {
-            return response()->json(['EventType' => $eventType]);
+            return $this->sendData(['EventType' => $eventType]);
         }
         else {
-            return response(['message' => trans('messages.eventTypeUpdateError')], 409);
+            return $this->sendInternalError('messages.eventTypeUpdateError');
         }
     }
 
-    public function delete($id) {
+    /**
+     * Returns response after success delete
+     *
+     * @param $id
+     * @return Response
+     */
+    public function delete($id): Response
+    {
         $eventType = EventType::getEventTypeByID($id);
         if($eventType == null) {
-            return response(['message' => trans('messages.eventTypeDoesntExistError')], 404);
+            return $this->sendNotFound('messages.eventTypeDoesntExistError');
         }
 
         $events = $eventType->event;
 
         if(count($events) > 0) {
-            return response(['message' => trans('messages.eventTypeDeleteError')], 400);
+            return $this->sendConflict('messages.eventTypeDeleteError');
         }
 
         $eventType->delete();
 
-        return response('', 204);
+        return $this->sendNoContent();
     }
 }
