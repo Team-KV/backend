@@ -8,7 +8,9 @@ use App\Models\Event;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 
 class ClientController extends Controller
@@ -16,20 +18,20 @@ class ClientController extends Controller
     /**
      * Returns collection of clients in JSON
      *
-     * @return void
+     * @return JsonResponse
      */
-    public function list(): void
+    public function list(): JsonResponse
     {
-        $this->sendData(Client::getListOfClients());
+        return $this->sendData(Client::getListOfClients());
     }
 
     /**
      * Creates new client object
      *
      * @param Request $request
-     * @return void
+     * @return Response|JsonResponse
      */
-    public function create(Request $request): void
+    public function create(Request $request): Response|JsonResponse
     {
         $params = $request->validate([
             'first_name' => ['required', 'string'],
@@ -55,46 +57,46 @@ class ClientController extends Controller
         ]);
 
         if (Client::getClientByPIN($params['personal_information_number']) != null || User::getUserByEmail($params['contact_email']) != null) {
-            $this->sendConflict('messages.clientAlreadyExistsError');
+            return $this->sendConflict('messages.clientAlreadyExistsError');
         }
 
         if ($params['no_czech'] != true && $params['personal_information_number'] != null && $params['personal_information_number'] != '') {
             if (!Client::verifyPIN($params['personal_information_number'])) {
-                $this->sendConflict('messages.clientPINError');
+                return $this->sendConflict('messages.clientPINError');
             }
         }
 
         try {
             $client = Client::create($params);
         } catch (QueryException) {
-            $this->sendConflict('messages.clientCreateError');
+            return $this->sendConflict('messages.clientCreateError');
         }
 
         Storage::makeDirectory('clients/' . $client->id);
 
         if (isset($params['contact_email']) && $params['contact_email'] != "" && $params['contact_email'] != null) {
             if (!User::createUser($params['contact_email'], $client->id)) {
-                $this->sendResponse('', 409, ['message' => trans('messages.userCreateError'), 'Client' => $client]);
+                return $this->sendResponse('', 409, ['message' => trans('messages.userCreateError'), 'Client' => $client]);
             }
         }
 
-        $this->sendData(['Client' => $client]);
+        return $this->sendData(['Client' => $client]);
     }
 
     /**
      * Returns client by ID
      *
      * @param $id
-     * @return void
+     * @return Response|JsonResponse
      */
-    public function detail($id): void
+    public function detail($id): Response|JsonResponse
     {
         $client = Client::getClientWithAllByID($id);
         if ($client == null) {
-            $this->sendNotFound('messages.clientDoesntExistsError');
+            return $this->sendNotFound('messages.clientDoesntExistsError');
         }
 
-        $this->sendData(['Client' => $client]);
+        return $this->sendData(['Client' => $client]);
     }
 
     /**
@@ -102,12 +104,12 @@ class ClientController extends Controller
      *
      * @param $id
      * @param Request $request
-     * @return void
+     * @return Response|JsonResponse
      */
-    public function update($id, Request $request): void
+    public function update($id, Request $request): Response|JsonResponse
     {
         if (Client::getClientByID($id) == null) {
-            $this->sendNotFound('messages.clientDoesntExistsError');
+            return $this->sendNotFound('messages.clientDoesntExistsError');
         }
 
         $params = $request->validate([
@@ -135,14 +137,14 @@ class ClientController extends Controller
 
         if ($params['no_czech'] != true && $params['personal_information_number'] != null && $params['personal_information_number'] != '') {
             if (!Client::verifyPIN($params['personal_information_number'])) {
-                $this->sendConflict('messages.clientPINError');
+                return $this->sendConflict('messages.clientPINError');
             }
         }
 
         if (Client::updateClientByID($id, $params)) {
-            $this->sendData(['Client' => Client::getClientWithAllByID($id)]);
+            return $this->sendData(['Client' => Client::getClientWithAllByID($id)]);
         } else {
-            $this->sendConflict('messages.clientUpdateError');
+            return $this->sendConflict('messages.clientUpdateError');
         }
     }
 
@@ -150,17 +152,17 @@ class ClientController extends Controller
      * Returns response after success delete
      *
      * @param $id
-     * @return void
+     * @return Response|JsonResponse
      */
-    public function delete($id): void
+    public function delete($id): Response|JsonResponse
     {
         $client = Client::getClientByID($id);
         if ($client == null) {
-            $this->sendNotFound('messages.clientDoesntExistsError');
+            return $this->sendNotFound('messages.clientDoesntExistsError');
         }
 
         if(count($client->children) != 0) {
-            $this->sendConflict('messages.clientParentError');
+            return $this->sendConflict('messages.clientParentError');
         }
 
         Attachment::removeFilesByClientID($id);
@@ -180,42 +182,42 @@ class ClientController extends Controller
 
         $client->delete();
 
-        $this->sendNoContent();
+        return $this->sendNoContent();
     }
 
     /**
      * Returns response with created user in JSON
      *
      * @param $id
-     * @return void
+     * @return Response|JsonResponse
      */
-    public function createUser($id): void
+    public function createUser($id): Response|JsonResponse
     {
         $client = Client::getClientByID($id);
         if ($client != null) {
             if ($client->contact_email != '' && $client->contact_email != null) {
                 if (!User::createUser($client->contact_email, $client->id)) {
-                    $this->sendResponse('', 409, ['message' => trans('messages.userCreateError'), 'Client' => $client]);
+                    return $this->sendResponse('', 409, ['message' => trans('messages.userCreateError'), 'Client' => $client]);
                 }
             } else {
-                $this->sendConflict('messages.clientEmailError');
+                return $this->sendConflict('messages.clientEmailError');
             }
         } else {
-            $this->sendNotFound('messages.clientDoesntExistsError');
+            return $this->sendNotFound('messages.clientDoesntExistsError');
         }
 
-        $this->sendData(['Client' => Client::getClientWithAllByID($id)]);
+        return $this->sendData(['Client' => Client::getClientWithAllByID($id)]);
     }
 
     /**
      * Returns response with graph data for specific client in JSON
      *
      * @param $id
-     * @return void
+     * @return JsonResponse
      */
-    public function graph($id): void
+    public function graph($id): JsonResponse
     {
-        $this->sendData(['GraphData' => Client::getGraphData($id)]);
+        return $this->sendData(['GraphData' => Client::getGraphData($id)]);
     }
 
     /**
@@ -223,13 +225,13 @@ class ClientController extends Controller
      *
      * @param $id
      * @param Request $request
-     * @return void
+     * @return Response|JsonResponse
      */
-    public function uploadAttachments($id, Request $request): void
+    public function uploadAttachments($id, Request $request): Response|JsonResponse
     {
         $client = Client::getClientByID($id);
         if ($client == null) {
-            $this->sendNotFound('messages.clientDoesntExistsError');
+            return $this->sendNotFound('messages.clientDoesntExistsError');
         }
 
         $files = $request->file('files');
@@ -238,7 +240,7 @@ class ClientController extends Controller
             $uploaded = self::uploadAttachmentsToClient($client, $files);
         }
 
-        $this->sendData(['Attachments' => $uploaded, 'Count' => count($uploaded)]);
+        return $this->sendData(['Attachments' => $uploaded, 'Count' => count($uploaded)]);
     }
 
     /**
@@ -246,13 +248,13 @@ class ClientController extends Controller
      *
      * @param $id
      * @param Request $request
-     * @return void
+     * @return Response|JsonResponse
      */
-    public function attachTags($id, Request $request): void
+    public function attachTags($id, Request $request): Response|JsonResponse
     {
         $client = Client::getClientByID($id);
         if ($client == null) {
-            $this->sendNotFound('messages.clientDoesntExistsError');
+            return $this->sendNotFound('messages.clientDoesntExistsError');
         }
 
         $params = $request->validate([
@@ -265,7 +267,7 @@ class ClientController extends Controller
             }
         }
 
-        $this->sendData(['Client' => Client::getClientWithAllByID($id)]);
+        return $this->sendData(['Client' => Client::getClientWithAllByID($id)]);
     }
 
     /**
@@ -273,13 +275,13 @@ class ClientController extends Controller
      *
      * @param $id
      * @param Request $request
-     * @return void
+     * @return Response|JsonResponse
      */
-    public function detachTag($id, Request $request): void
+    public function detachTag($id, Request $request): Response|JsonResponse
     {
         $client = Client::getClientByID($id);
         if ($client == null) {
-            $this->sendNotFound('messages.clientDoesntExistsError');
+            return $this->sendNotFound('messages.clientDoesntExistsError');
         }
 
         $params = $request->validate([
@@ -290,10 +292,10 @@ class ClientController extends Controller
             $client->tags()->detach($params['tag_id']);
         }
         else {
-            $this->sendNotFound('messages.tagDoesntExistError');
+            return $this->sendNotFound('messages.tagDoesntExistError');
         }
 
-        $this->sendData(['Client' => Client::getClientWithAllByID($id)]);
+        return $this->sendData(['Client' => Client::getClientWithAllByID($id)]);
     }
 
     /**
