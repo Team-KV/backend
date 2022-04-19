@@ -22,7 +22,7 @@ class ExerciseTaskController extends Controller
     {
         $exerciseTask = ExerciseTask::getExerciseTaskByID($id);
         if($exerciseTask == null) {
-            return response(['message' => trans('messages.exerciseTaskDoesntExistError')], 404);
+            return $this->sendNotFound('messages.exerciseTaskDoesntExistError');
         }
 
         $params = $request->validate([
@@ -35,17 +35,17 @@ class ExerciseTaskController extends Controller
         ]);
 
         if(Exercise::getExerciseByID($params['exercise_id']) == null) {
-            return response(['message' => trans('messages.exerciseDoesntExistError')], 404);
+            return $this->sendNotFound('messages.exerciseDoesntExistError');
         }
 
         $task = Task::getTaskByID($params['task_id']);
         if($task == null) {
-            return response(['message' => trans('messages.taskDoesntExistError')], 404);
+            return $this->sendNotFound('messages.taskDoesntExistError');
         }
 
         $task->exercises()->wherePivot('task_id', '=', $id)->first()->update($params);
 
-        return response()->json(['ExerciseTask' => $exerciseTask]);
+        return $this->sendData(['ExerciseTask' => $exerciseTask]);
     }
 
     /**
@@ -58,16 +58,16 @@ class ExerciseTaskController extends Controller
     {
         $exerciseTask = ExerciseTask::getExerciseTaskByID($id);
         if($exerciseTask == null) {
-            return response(['message' => trans('messages.exerciseTaskDoesntExistError')], 404);
+            return $this->sendNotFound('messages.exerciseTaskDoesntExistError');
         }
 
         $task = Task::getTaskByID($exerciseTask->task_id);
         if($task == null) {
-            return response(['message' => trans('messages.taskDoesntExistError')], 404);
+            return $this->sendNotFound('messages.taskDoesntExistError');
         }
 
         $task->exercises()->detach($exerciseTask->exercise_id);
 
-        return response('', 204);
+        return $this->sendNoContent();
     }
 }
