@@ -17,7 +17,7 @@ class CategoryController extends Controller
      */
     public function list(): JsonResponse
     {
-        return response()->json(Category::getAllCategories());
+        return $this->sendData(Category::getAllCategories());
     }
 
     /**
@@ -36,10 +36,10 @@ class CategoryController extends Controller
         try {
             $category = Category::create($params);
         } catch (QueryException) {
-            return response(['message' => trans('messages.categoryCreateError')], 409);
+            return $this->sendConflict('messages.categoryCreateError');
         }
 
-        return response()->json(['Category' => $category]);
+        return $this->sendData(['Category' => $category]);
     }
 
     /**
@@ -52,10 +52,10 @@ class CategoryController extends Controller
     {
         $category = Category::getCategoryByID($id);
         if ($category == null) {
-            return response(['message' => trans('messages.categoryDoesntExistError')], 404);
+            return $this->sendNotFound('messages.categoryDoesntExistError');
         }
 
-        return response()->json(['Category' => $category]);
+        return $this->sendData(['Category' => $category]);
     }
 
     /**
@@ -69,7 +69,7 @@ class CategoryController extends Controller
     {
         $category = Category::getCategoryByID($id);
         if ($category == null) {
-            return response(['message' => trans('messages.categoryDoesntExistError')], 404);
+            return $this->sendNotFound('messages.categoryDoesntExistError');
         }
 
         $params = $request->validate([
@@ -78,9 +78,9 @@ class CategoryController extends Controller
         ]);
 
         if (Category::updateCategory($category, $params)) {
-            return response()->json(['Category' => $category]);
+            return $this->sendData(['Category' => $category]);
         } else {
-            return response(['message' => trans('messages.categoryUpdateError')], 409);
+            return $this->sendConflict('messages.categoryUpdateError');
         }
     }
 
@@ -94,15 +94,15 @@ class CategoryController extends Controller
     {
         $category = Category::getCategoryWithAllByID($id);
         if ($category == null) {
-            return response(['message' => trans('messages.categoryDoesntExistError')], 404);
+            return $this->sendNotFound('messages.categoryDoesntExistError');
         }
 
         if(count($category->exercises) != 0) {
-            return response(['message' => trans('messages.categoryHasExercisesError')], 409);
+            return $this->sendConflict('messages.categoryHasExercisesError');
         }
 
         $category->delete();
 
-        return response('', 204);
+        return $this->sendNoContent();
     }
 }
