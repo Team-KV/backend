@@ -41,5 +41,6 @@ return [
     'exerciseTaskUpdateError' => 'Evaluation of exercise cannot be updated.',
     'tagCreateError' => 'Tag cannot be created.',
     'tagDoesntExistError' => 'Tag doesn\'t exist.',
-    'tagUpdateError' => 'Tag cannot be updated.'
+    'tagUpdateError' => 'Tag cannot be updated.',
+    'noAccessError' => 'You don\'t have access to this section.'
 ];

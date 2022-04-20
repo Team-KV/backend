@@ -72,6 +72,20 @@ class Event extends Model
     }
 
     /**
+     * Returns next event by client ID
+     *
+     * @param $client_id
+     * @return Event|null
+     */
+    public static function getNextEventByClientID($client_id): Event|null
+    {
+        return self::all()->
+            where('start', '>=', date('Y-m-d H:i:s', strtotime(NOW()->toString())))->
+            where('client_id', $client_id)->
+            first();
+    }
+
+    /**
      * Returns collection of events
      *
      * @return Collection

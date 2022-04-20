@@ -41,5 +41,6 @@ return [
     'exerciseTaskUpdateError' => 'Hodnocení cviku se nepodařilo upravit.',
     'tagCreateError' => 'Tag se nepodařilo vytvořit.',
     'tagDoesntExistError' => 'Tag neexistuje.',
-    'tagUpdateError' => 'Tag se nepodařilo upravit.'
+    'tagUpdateError' => 'Tag se nepodařilo upravit.',
+    'noAccessError' => 'Do této sekce nemáte přístup.'
 ];

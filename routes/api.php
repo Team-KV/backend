@@ -3,6 +3,7 @@
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventTypeController;
 use App\Http\Controllers\ExerciseController;
@@ -155,6 +156,6 @@ Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(func
     Route::delete('/tag/{id}', [TagController::class, 'delete'])->name('delete_tag');
 });
 
-Route::middleware('localization')->middleware(['auth:sanctum', 'ability:client'])->group(function () {
-
+Route::middleware(['localization', 'auth:sanctum', 'ability:client'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('client_dashboard');
 });
