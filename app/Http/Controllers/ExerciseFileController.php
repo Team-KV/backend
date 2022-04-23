@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\ExerciseFile;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ExerciseFileController extends Controller
@@ -14,21 +16,18 @@ class ExerciseFileController extends Controller
      * Returns file by ID
      *
      * @param $id
-     * @return Response|StreamedResponse
+     * @return Response|BinaryFileResponse
      */
-    public function download($id): Response|StreamedResponse
+    public function download($id): Response|BinaryFileResponse
     {
         $exerciseFile = ExerciseFile::getFileByID($id);
         if($exerciseFile == null) {
             return $this->sendNotFound('messages.fileDoesntExistError');
         }
 
-        $path = 'exercises/' . $exerciseFile->exercise_id . '/' . $exerciseFile->file_name;
-        if(Storage::exists($path)) {
-            return Storage::download($path);
-        }
-
-        return $this->sendNotFound('messages.fileDoesntExistError');
+        $path = 'app/exercises/' . $exerciseFile->exercise_id . '/' . $exerciseFile->file_name;
+        $filepath = storage_path($path);
+        return response()->file($filepath);
     }
 
     /**
