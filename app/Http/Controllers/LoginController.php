@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -69,5 +71,40 @@ class LoginController extends Controller
         });
 
         return $this->sendNoContent();
+    }
+
+    public function update($id, Request $request): Response|JsonResponse
+    {
+        $user = User::getUserByID($id);
+        if($user == null) {
+            return $this->sendNotFound('messages.userDoesntExistsError');
+        }
+
+        $params = $request->validate([
+            'email' => ['string', 'nullable'],
+            'password' => ['string', 'nullable'],
+            'password_again' => ['string', 'nullable']
+        ]);
+
+        $userParams = [];
+        if($params['email'] != null) {
+            $userParams['email'] = $params['email'];
+        }
+        if($params['password'] != null) {
+            if($params['password'] == $params['password_again']) {
+                $userParams['password'] = Hash::make($params['email']);
+            }
+            else {
+                return $this->sendConflict('messages.passwordError');
+            }
+        }
+
+        try {
+            $user->update($userParams);
+        } catch (QueryException) {
+            return $this->sendInternalError('messages.userUpdateError');
+        }
+
+        return $this->sendData(['User' => $user]);
     }
 }

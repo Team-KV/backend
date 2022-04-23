@@ -36,6 +36,8 @@ Route::middleware(['localization', 'auth:sanctum'])->group(function () {
 
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
+    Route::put('/user/{id}', [LoginController::class, 'update'])->name('update_user');
+
 
     Route::put('/exercise-task/{id}', [ExerciseTaskController::class, 'update'])->name('update_exercise_task');
 });
