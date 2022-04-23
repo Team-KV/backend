@@ -35,6 +35,9 @@ Route::middleware(['localization', 'auth:sanctum'])->group(function () {
     Route::get('/info', [LoginController::class, 'info'])->name('info_about_user');
 
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+
+    Route::put('/exercise-task/{id}', [ExerciseTaskController::class, 'update'])->name('update_exercise_task');
 });
 
 Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(function () {
@@ -139,8 +142,6 @@ Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(func
 
     Route::post('/task/{id}/add-exercises', [TaskController::class, 'addExercises'])->name('add_exercises_to_task');
 
-
-    Route::put('/exercise-task/{id}', [ExerciseTaskController::class, 'update'])->name('update_exercise_task');
 
     Route::delete('/exercise-task/{id}', [ExerciseTaskController::class, 'delete'])->name('delete_exercise_task');
 

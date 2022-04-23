@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\Event;
+use App\Models\Staff;
+use App\Models\Task;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -17,12 +19,13 @@ class DashboardController extends Controller
         if($user != null) {
             $client = $user->client;
 
-            if ($client != null) {
+            if($client != null) {
                 $nextEvent = Event::getNextEventByClientID($client->id);
                 $graphData = Client::getGraphData($client->id);
-                $staff = $nextEvent->staff;
+                $staff = Staff::getStaff();
+                $tasks = Task::getActiveTasksWithExercisesByClientID($client->id);
 
-                return $this->sendData(['NextEvent' => $nextEvent, 'GraphData' => $graphData, 'Staff' => $staff]);
+                return $this->sendData(['NextEvent' => $nextEvent, 'GraphData' => $graphData, 'Staff' => $staff, 'Tasks' => $tasks]);
             }
 
             return $this->sendBadRequest('messages.noAccessError');

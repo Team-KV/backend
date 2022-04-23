@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -45,6 +46,17 @@ class Task extends Model
     public static function getTaskWithExercisesByID($id): Model|null
     {
         return self::with('exercises')->where('id', $id)->first();
+    }
+
+    /**
+     * Returns task with exercises by client ID
+     *
+     * @param $client_id
+     * @return Collection
+     */
+    public static function getActiveTasksWithExercisesByClientID($client_id): Collection
+    {
+        return self::with('exercises')->where('client_id', $client_id)->where('is_active', true)->get();
     }
 
     /**
