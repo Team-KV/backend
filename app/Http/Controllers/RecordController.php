@@ -8,6 +8,8 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class RecordController extends Controller
 {
@@ -39,6 +41,7 @@ class RecordController extends Controller
 
         try {
             $record = Record::create($params);
+            Log::channel('record')->info('Create record.', ['author_id' => Auth::user()->id, 'Record' => $record]);
         } catch (QueryException) {
             return $this->sendInternalError('messages.recordCreateError');
         }
@@ -84,6 +87,7 @@ class RecordController extends Controller
         ]);
 
         if(Record::updateRecord($record, $params)) {
+            Log::channel('record')->info('Update record', ['author_id' => Auth::user()->id, 'record_id' => $record->id, 'Params' => $params]);
             return $this->sendData(['Record' => $record]);
         }
         else {
@@ -104,6 +108,7 @@ class RecordController extends Controller
             return $this->sendNotFound('messages.recordDoesntExistError');
         }
 
+        Log::channel('record')->info('Delete record', ['author_id' => Auth::user()->id, 'record_id' => $record->id]);
         $record->delete();
 
         return $this->sendNoContent();

@@ -120,6 +120,12 @@ return [
             'path' => storage_path('logs/reception.log'),
             'level' => 'info',
         ],
+
+        'record' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/record.log'),
+            'level' => 'info',
+        ]
     ],
 
 ];
