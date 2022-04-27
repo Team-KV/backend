@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -27,6 +28,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             if(Auth::user()->role === 1) {
+                Log::channel('reception')->info('Login admin user', ['user_id' => Auth::user()->id]);
                 return $this->sendData(
                     [
                         'Token' => Auth::user()->createToken('auth_token', ['admin'])->plainTextToken
@@ -34,6 +36,7 @@ class LoginController extends Controller
                 );
             }
             else {
+                Log::channel('reception')->info('Login client user', ['user_id' => Auth::user()->id]);
                 return $this->sendData(
                     [
                         'Token' => Auth::user()->createToken('auth_token', ['client'])->plainTextToken
@@ -66,6 +69,7 @@ class LoginController extends Controller
      */
     public function logout(): Response
     {
+        Log::channel('reception')->info('Logout user.', ['user_id' => Auth::user()->id]);
         Auth::user()->tokens->each(function($token) {
             $token->delete();
         });
@@ -101,6 +105,7 @@ class LoginController extends Controller
 
         try {
             $user->update($userParams);
+            Log::channel('reception')->info('Updated user login credentials.', ['user_id' => Auth::user()->id, 'Params' => $userParams]);
         } catch (QueryException) {
             return $this->sendInternalError('messages.userUpdateError');
         }
