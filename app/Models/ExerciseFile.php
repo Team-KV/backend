@@ -18,6 +18,7 @@ class ExerciseFile extends Model
     protected $fillable = [
         'file_name',
         'type',
+        'url',
         'exercise_id'
     ];
 

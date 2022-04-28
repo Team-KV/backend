@@ -169,8 +169,11 @@ class ExerciseController extends Controller
             $filename = $file->getClientOriginalName();
             $extension = $file->getClientOriginalExtension();
             if (in_array($extension, $allowedFileExtension)) {
-                $exerciseFile = ExerciseFile::create(['file_name' => $filename, 'type' => $extension, 'exercise_id' => $exercise->id]);
-                Storage::put('exercises/' . $exercise->id . '/' . $filename, file_get_contents($file));
+                if(Storage::exists('exercises/' . $exercise->id . '/' . $exercise->id . '_' . $filename)) {
+                    continue;
+                }
+                $exerciseFile = ExerciseFile::create(['file_name' => $filename, 'type' => $extension, 'exercise_id' => $exercise->id, 'url' => 'exercise-file/' . $exercise->id . '/' . $filename]);
+                Storage::put('exercises/' . $exercise->id . '/' . $exercise->id . '_' . $filename, file_get_contents($file));
                 array_push($uploaded, $exerciseFile);
             }
         }
