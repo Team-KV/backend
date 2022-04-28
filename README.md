@@ -21,6 +21,10 @@ sail artisan db:seed
 Admin login: admin@test.com, admin  
 Client login: client@test.com, client
 
+## Testing
+
+This command run all tests: ./vendor/bin/phpunit --testdox tests
+
 ## Usage
 
 After installation, you can use API on starting address http://localhost/api/.
