@@ -18,6 +18,7 @@ class Attachment extends Model
     protected $fillable = [
         'file_name',
         'type',
+        'url',
         'client_id'
     ];
 

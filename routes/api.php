@@ -29,6 +29,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('localization')->group(function () {
     Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
+
+
+    Route::get('/attachment/{id}/{filename}', [AttachmentController::class, 'download'])->name('download_attachment');
 });
 
 Route::middleware(['localization', 'auth:sanctum'])->group(function () {
@@ -63,8 +66,6 @@ Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(func
 
     Route::post('/client/{id}/detach-tag', [ClientController::class, 'detachTag'])->name('detach_tag_from_client');
 
-
-    Route::get('/attachment/{id}', [AttachmentController::class, 'download'])->name('download_attachment');
 
     Route::delete('/attachment/{id}', [AttachmentController::class, 'delete'])->name('delete_attachment');
 

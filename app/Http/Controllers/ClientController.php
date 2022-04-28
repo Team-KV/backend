@@ -319,8 +319,11 @@ class ClientController extends Controller
             $filename = $file->getClientOriginalName();
             $extension = $file->getClientOriginalExtension();
             if (in_array($extension, $allowedFileExtension)) {
-                $attachment = Attachment::create(['file_name' => $filename, 'type' => $extension, 'client_id' => $client->id]);
-                Storage::put('clients/' . $client->id . '/' . $filename, file_get_contents($file));
+                if(Storage::exists('clients/' . $client->id . '/' . $client->id . '_' . $filename)) {
+                    continue;
+                }
+                $attachment = Attachment::create(['file_name' => $filename, 'type' => $extension, 'client_id' => $client->id, 'url' => 'attachment/' . $client->id . '/' . $filename]);
+                Storage::put('clients/' . $client->id . '/' . $client->id . '_' . $filename, file_get_contents($file));
                 array_push($uploaded, $attachment);
             }
         }

@@ -16,18 +16,16 @@ class AttachmentController extends Controller
      * Returns file by ID
      *
      * @param $id
-     * @return Response|JsonResponse
+     * @param $filename
+     * @return Response|StreamedResponse
      */
-    public function download($id): Response|BinaryFileResponse
+    public function download($id, $filename): Response|StreamedResponse
     {
-        $attachment = Attachment::getFileByID($id);
-        if($attachment == null) {
-            $this->sendNotFound('messages.fileDoesntExistError');
+        if(Storage::exists('clients/' . $id . '/' . $id . '_' . $filename)) {
+            return Storage::download('clients/' . $id . '/' . $id . '_' . $filename);
         }
 
-        $path = 'app/clients/' . $attachment->client_id . '/' . $attachment->file_name;
-        $filepath = storage_path($path);
-        return response()->file($filepath);
+        return $this->sendNotFound('messages.fileDoesntExistError');
     }
 
     /**
