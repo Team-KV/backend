@@ -96,7 +96,7 @@ class LoginController extends Controller
         }
         if($params['password'] != null) {
             if($params['password'] == $params['password_again']) {
-                $userParams['password'] = Hash::make($params['email']);
+                $userParams['password'] = Hash::make($params['password']);
             }
             else {
                 return $this->sendConflict('messages.passwordError');
@@ -105,6 +105,7 @@ class LoginController extends Controller
 
         try {
             $user->update($userParams);
+            unset($userParams['password']);
             Log::channel('reception')->info('Updated user login credentials.', ['user_id' => Auth::user()->id, 'Params' => $userParams]);
         } catch (QueryException) {
             return $this->sendInternalError('messages.userUpdateError');
