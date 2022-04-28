@@ -11,6 +11,8 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ClientController extends Controller
@@ -68,6 +70,7 @@ class ClientController extends Controller
 
         try {
             $client = Client::create($params);
+            Log::channel('client')->info('Client create.', ['author_id' => Auth::user()->id, 'Client' => $client]);
         } catch (QueryException) {
             return $this->sendInternalError('messages.clientCreateError');
         }
@@ -142,6 +145,7 @@ class ClientController extends Controller
         }
 
         if (Client::updateClientByID($id, $params)) {
+            Log::channel('client')->info('Update client.', ['author_id' => Auth::user()->id, 'client_id' => $id, 'Params' => $params]);
             return $this->sendData(['Client' => Client::getClientWithAllByID($id)]);
         } else {
             return $this->sendInternalError('messages.clientUpdateError');
@@ -180,6 +184,7 @@ class ClientController extends Controller
             $client->user->delete();
         }
 
+        Log::channel('client')->info('Delete client.', ['author_id' => Auth::user()->id, 'client_id' => $id]);
         $client->delete();
 
         return $this->sendNoContent();

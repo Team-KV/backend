@@ -28,7 +28,7 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             if(Auth::user()->role === 1) {
-                Log::channel('reception')->info('Login admin user', ['user_id' => Auth::user()->id]);
+                Log::channel('reception')->info('Login admin user.', ['user_id' => Auth::user()->id]);
                 return $this->sendData(
                     [
                         'Token' => Auth::user()->createToken('auth_token', ['admin'])->plainTextToken
@@ -36,7 +36,7 @@ class LoginController extends Controller
                 );
             }
             else {
-                Log::channel('reception')->info('Login client user', ['user_id' => Auth::user()->id]);
+                Log::channel('reception')->info('Login client user.', ['user_id' => Auth::user()->id]);
                 return $this->sendData(
                     [
                         'Token' => Auth::user()->createToken('auth_token', ['client'])->plainTextToken

@@ -125,7 +125,13 @@ return [
             'driver' => 'single',
             'path' => storage_path('logs/record.log'),
             'level' => 'info',
-        ]
+        ],
+
+        'client' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/client.log'),
+            'level' => 'info',
+        ],
     ],
 
 ];
