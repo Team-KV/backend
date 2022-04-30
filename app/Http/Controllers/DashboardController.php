@@ -29,10 +29,10 @@ class DashboardController extends Controller
                 $staff = Staff::getStaff();
                 $tasks = Task::getActiveTasksWithExercisesByClientID($client->id);
 
-                return $this->sendData(['NextEvent' => $nextEvent,
-                    'GraphData' => $graphData,
+                return $this->sendData(['Event' => $nextEvent,
+                    'Graph' => $graphData,
                     'Staff' => $staff,
-                    'Tasks' => $tasks,
+                    'ActiveTasks' => $tasks,
                     'Client' => $client->parent,
                     'Children' => $client->children]);
             }
@@ -66,10 +66,10 @@ class DashboardController extends Controller
                     $staff = Staff::getStaff();
                     $tasks = Task::getActiveTasksWithExercisesByClientID($child->id);
 
-                    return $this->sendData(['NextEvent' => $nextEvent,
-                        'GraphData' => $graphData,
+                    return $this->sendData(['Event' => $nextEvent,
+                        'Graph' => $graphData,
                         'Staff' => $staff,
-                        'Tasks' => $tasks,
+                        'ActiveTasks' => $tasks,
                         'Client' => $child->parent,
                         'Children' => $child->children]);
                 }
