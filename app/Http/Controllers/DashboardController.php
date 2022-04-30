@@ -33,7 +33,7 @@ class DashboardController extends Controller
                     'GraphData' => $graphData,
                     'Staff' => $staff,
                     'Tasks' => $tasks,
-                    'Parent' => $client->parent,
+                    'Client' => $client->parent,
                     'Children' => $client->children]);
             }
 
@@ -70,7 +70,7 @@ class DashboardController extends Controller
                         'GraphData' => $graphData,
                         'Staff' => $staff,
                         'Tasks' => $tasks,
-                        'Parent' => $child->parent,
+                        'Client' => $child->parent,
                         'Children' => $child->children]);
                 }
 
