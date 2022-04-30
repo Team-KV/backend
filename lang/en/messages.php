@@ -9,6 +9,7 @@ return [
     'clientEmailError' => 'Client\'s email is not set.',
     'clientParentError' => 'Client is connected to another client.',
     'clientUpdateError' => 'Client cannot be updated. Please try it again.',
+    'clientRelationError' => 'Client is not managed by this account.',
     'userCreateError' => 'User for client cannot be created.',
     'userDoesntExistsError' => 'User doesn\'t exist.',
     'passwordError' => 'Passwords aren\'t same.',

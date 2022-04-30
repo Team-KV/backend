@@ -9,6 +9,7 @@ return [
     'clientEmailError' => 'Email klienta není nastaven.',
     'clientParentError' => 'Klient je vázán na jiného klienta.',
     'clientUpdateError' => 'Klienta se nepodařilo upravit.',
+    'clientRelationError' => 'Klient není spravován tímto účtem.',
     'userCreateError' => 'Uživatele pro klienta se nepodařilo vytvořit.',
     'userDoesntExistsError' => 'Uživatel neexistuje.',
     'passwordError' => 'Hesla se neshodují',

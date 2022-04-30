@@ -163,4 +163,6 @@ Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(func
 
 Route::middleware(['localization', 'auth:sanctum', 'ability:client'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('client_dashboard');
+
+    Route::get('/dashboard/{id}', [DashboardController::class, 'dashboardChild'])->name('child_dashboard');
 });
