@@ -35,6 +35,9 @@ Route::middleware('localization')->group(function () {
 
 
     Route::get('/exercise-file/{id}/{filename}', [ExerciseFileController::class, 'download'])->name('download_exercise_file');
+
+
+    Route::get('/export/{id}/{filename}', [ClientController::class, 'downloadExport'])->name('download_export');
 });
 
 Route::middleware(['localization', 'auth:sanctum'])->group(function () {
@@ -70,6 +73,8 @@ Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(func
     Route::post('/client/{id}/attach-tags', [ClientController::class, 'attachTags'])->name('attach_tags_to_client');
 
     Route::post('/client/{id}/detach-tag', [ClientController::class, 'detachTag'])->name('detach_tag_from_client');
+
+    Route::get('/client/{id}/export', [ClientController::class, 'exportData'])->name('export_personal_data');
 
 
     Route::delete('/attachment/{id}', [AttachmentController::class, 'delete'])->name('delete_attachment');
