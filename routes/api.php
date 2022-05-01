@@ -53,6 +53,8 @@ Route::middleware(['localization', 'auth:sanctum', 'ability:admin'])->group(func
 
     Route::post('/client', [ClientController::class, 'create'])->name('create_client');
 
+    Route::get('/client/search/{tag}', [ClientController::class, 'searchByTag'])->name('search_client_by_tag');
+
     Route::get('/client/{id}', [ClientController::class, 'detail'])->name('detail_of_client');
 
     Route::put('/client/{id}', [ClientController::class, 'update'])->name('update_client');

@@ -304,6 +304,22 @@ class ClientController extends Controller
     }
 
     /**
+     * Returns response with clients by tag in JSON
+     *
+     * @param $tag
+     * @return JsonResponse
+     */
+    public function searchByTag($tag): JsonResponse
+    {
+        $tag = Tag::getTagByName($tag);
+        if($tag == null) {
+            return $this->sendData([]);
+        }
+
+        return $this->sendData($tag->clients);
+    }
+
+    /**
      * Uploads attachments to client
      *
      * @param Client $client
