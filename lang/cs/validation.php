@@ -143,10 +143,10 @@ return [
 
     'custom' => [
         'email' => [
-            'required' => 'Email is required.'
+            'required' => 'Email je povinný.'
         ],
         'password' => [
-            'required' => 'Password is required.',
+            'required' => 'Heslo je povinné.',
         ],
     ],
 

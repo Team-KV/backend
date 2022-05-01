@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('exercise_task', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->unique();
-            $table->string("password");
-            $table->tinyInteger("role");
-            $table->dateTime("email_verified_at")->nullable();
-            $table->foreignId("staff_id")->nullable();
-            $table->foreignId("client_id")->nullable();
+            $table->string('feedback')->nullable();
+            $table->integer('difficulty')->nullable();
+            $table->integer('repetitions')->nullable();
+            $table->integer('duration')->nullable();
+            $table->foreignId('task_id');
+            $table->foreignId('exercise_id');
             $table->timestamps();
         });
     }
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('exercise_tasks');
     }
 };
