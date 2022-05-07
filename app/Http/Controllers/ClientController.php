@@ -280,22 +280,18 @@ class ClientController extends Controller
      * Returns response with client in JSON after detach tag
      *
      * @param $id
-     * @param Request $request
+     * @param $tag_id
      * @return Response|JsonResponse
      */
-    public function detachTag($id, Request $request): Response|JsonResponse
+    public function detachTag($id, $tag_id): Response|JsonResponse
     {
         $client = Client::getClientByID($id);
         if ($client == null) {
             return $this->sendNotFound('messages.clientDoesntExistsError');
         }
 
-        $params = $request->validate([
-            'tag_id' => ['required', 'numeric']
-        ]);
-
-        if(Tag::getTagByID($params['tag_id']) != null) {
-            $client->tags()->detach($params['tag_id']);
+        if(Tag::getTagByID($tag_id) != null) {
+            $client->tags()->detach($tag_id);
         }
         else {
             return $this->sendNotFound('messages.tagDoesntExistError');
