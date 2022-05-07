@@ -1,15 +1,23 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Testing\Fluent\AssertableJson;
-use PhpParser\Node\Scalar\String_;
+use Tests\CreatesApplication;
 use Tests\TestCase;
 
 class LoginTest extends TestCase
 {
+    use CreatesApplication, DatabaseMigrations;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        Artisan::call('db:seed');
+    }
+
     public function test_login()
     {
         $response = $this->postJson('/api/login', [
@@ -46,10 +54,24 @@ class LoginTest extends TestCase
         $response = $this->withHeader('Authorization', 'Bearer '.$token)->get('/api/info');
 
         $response->assertStatus(200)->assertJson(fn (AssertableJson $json) => $json->
-            has('User', fn ($json) =>
-                $json->hasAny('id', 'email', 'email_verified_at', 'role', 'staff_id', 'client_id', 'staff', 'client', 'created_at', 'updated_at')));
+        has('User', fn ($json) =>
+        $json->hasAny('id', 'email', 'email_verified_at', 'role', 'staff_id', 'client_id', 'staff', 'client', 'created_at', 'updated_at')));
 
         $this->withHeader('Authorization', 'Bearer '.$token)->get('/api/logout');
+    }
+
+    public function test_update_user()
+    {
+        $token = $this->getToken();
+
+        $response = $this->withHeader('Authorization', 'Bearer '.$token)->putJson('/api/user/1', [
+            'email' => 'adminn@test.com',
+            'password' => '123456',
+            'password_again' => '123456'
+        ]);
+
+        $response->assertStatus(200)->
+            assertJsonPath('User.email', 'adminn@test.com');
     }
 
     private function getToken(): String
