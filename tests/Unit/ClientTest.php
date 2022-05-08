@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 use Tests\CreatesApplication;
 use Tests\TestCase;
 
@@ -20,6 +21,7 @@ class ClientTest extends TestCase
     {
         parent::setUp();
         Artisan::call('db:seed');
+        Storage::fake('clients');
         $this->token = $this->getToken();
     }
 
