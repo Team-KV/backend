@@ -12,6 +12,8 @@ class ExerciseTask extends Model
 {
     use HasFactory;
 
+    protected $table = 'exercise_task';
+
     /**
      * The attributes that are mass assignable.
      *

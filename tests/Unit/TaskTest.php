@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Models\Event;
 use App\Models\Exercise;
+use App\Models\ExerciseTask;
 use App\Models\Task;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -22,6 +23,7 @@ class TaskTest extends TestCase
         parent::setUp();
         Artisan::call('db:seed');
         Artisan::call('db:seed --class=ClientSeeder');
+        Artisan::call('db:seed --class=ClientUserSeeder');
     }
 
     public function test_create()
@@ -114,6 +116,65 @@ class TaskTest extends TestCase
         assertJsonPath('ExerciseTasks.0.exercise_id', $exercise->id);
     }
 
+    public function test_update_exercise_task()
+    {
+        $event = $this->createEvent();
+        $exercise = $this->createExercise();
+        $task = $this->createTask(1, $event->id);
+        $exerciseTask = $this->createExerciseTask($task->id, $exercise->id);
+
+        //Need token to identify user role
+        $response = $this->
+        withHeader('Authorization', 'Bearer '.$this->getToken())->
+        putJson('/api/exercise-task/'.$exerciseTask->id, [
+            'repetitions' => 30,
+            'duration' => 30,
+            'exercise_id' => $exercise->id,
+            'task_id' => $task->id
+        ]);
+
+        $response->assertStatus(200)->
+        assertJsonPath('ExerciseTask.repetitions', 30)->
+        assertJsonPath('ExerciseTask.duration', 30)->
+        assertJsonPath('ExerciseTask.exercise_id', $exercise->id)->
+        assertJsonPath('ExerciseTask.task_id', $task->id);
+    }
+
+    public function test_client_update_exercise_task()
+    {
+        $event = $this->createEvent();
+        $exercise = $this->createExercise();
+        $task = $this->createTask(1, $event->id);
+        $exerciseTask = $this->createExerciseTask($task->id, $exercise->id);
+
+        //Need token to identify user role
+        $response = $this->
+        withHeader('Authorization', 'Bearer '.$this->getTokenClient())->
+        putJson('/api/exercise-task/'.$exerciseTask->id, [
+            'feedback' => 'Bolest zad.',
+            'difficulty' => 3
+        ]);
+
+        $response->assertStatus(200)->
+        assertJsonPath('ExerciseTask.feedback', 'Bolest zad.')->
+        assertJsonPath('ExerciseTask.difficulty', 3);
+    }
+
+    public function test_delete_exercise_task()
+    {
+        $event = $this->createEvent();
+        $exercise = $this->createExercise();
+        $task = $this->createTask(1, $event->id);
+        $exerciseTask = $this->createExerciseTask($task->id, $exercise->id);
+
+        $this->delete('/api/exercise-task/'.$exerciseTask->id)->
+        assertStatus(204);
+
+        $this->get('/api/task/'.$task->id)->
+        assertStatus(200)->
+        assertJsonPath('Task.exercises', []);
+    }
+
     private function createTask($client_id, $event_id): Task
     {
         return Factory::factoryForModel(Task::class)->create([
@@ -145,5 +206,35 @@ class TaskTest extends TestCase
             'url' => 'https://www.youtube.com',
             'category_id' => null
         ]);
+    }
+
+    private function createExerciseTask($task_id, $exercise_id): ExerciseTask
+    {
+        return Factory::factoryForModel(ExerciseTask::class)->create([
+            'task_id' => $task_id,
+            'exercise_id' => $exercise_id,
+            'feedback' => null,
+            'difficulty' => null,
+            'repetitions' => 20,
+            'duration' => 30
+        ]);
+    }
+
+    private function getToken(): String
+    {
+        $response = $this->postJson('/api/login', [
+            'email' => 'admin@test.com',
+            'password' => 'admin'
+        ]);
+        return $response['Token'];
+    }
+
+    private function getTokenClient(): String
+    {
+        $response = $this->postJson('/api/login', [
+            'email' => 'client@test.com',
+            'password' => 'client'
+        ]);
+        return $response['Token'];
     }
 }
