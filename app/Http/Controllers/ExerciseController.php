@@ -120,6 +120,8 @@ class ExerciseController extends Controller
             return $this->sendNotFound('messages.exerciseDoesntExistError');
         }
 
+        $exercise->tasks()->detach();
+
         ExerciseFile::removeFilesByExerciseID($id);
 
         Storage::delete(Storage::files('exercises/'.$exercise->id));
