@@ -4,13 +4,14 @@ This is backend part of Physio-therapeutic batchelor thesis.
 
 ## Installation
 
-For running this project locally you need to have installed Docker.
+For running this project locally you need to have installed PHP8.1, Composer and Docker.
 
 1. composer install
 2. cp .env.example .env
 3. alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
 4. sail up -d
-5. sail artisan migrate
+5. sail artisan key:generate
+6. sail artisan migrate
 
 ## Database seeding
 
@@ -23,7 +24,7 @@ Client login: client@test.com, client
 
 ## Testing
 
-This command run all tests: ./vendor/bin/phpunit --testdox tests
+This command run all tests: sail artisan test
 
 ## Usage
 
@@ -45,5 +46,5 @@ Mailhog for reading emails from system is available here: http://localhost:8025
 
 ## API description
 
-Description of API you can find in Postman workspace: https://app.getpostman.com/join-team?invite_code=b572a18ed494f692a7008adf12d151dc&target_code=cad4dff91b9d9244ce6c59014b1b3011
+Description of API you can find in Postman workspace: https://documenter.getpostman.com/view/18191289/UyxdLpeV
 

@@ -25,6 +25,14 @@ class Record extends Model
         'event_id'
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'event_id' => 'integer',
+    ];
 
     /**
      * Returns record by ID

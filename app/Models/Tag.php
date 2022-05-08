@@ -34,6 +34,17 @@ class Tag extends Model
     }
 
     /**
+     * Returns tag by name
+     *
+     * @param $name
+     * @return Tag|null
+     */
+    public static function getTagByName($name): Tag|null
+    {
+        return self::all()->where('name', $name)->first();
+    }
+
+    /**
      * Returns collection of tags
      *
      * @return Collection

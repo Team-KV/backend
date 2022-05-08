@@ -14,6 +14,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ClientController extends Controller
 {
@@ -279,28 +280,79 @@ class ClientController extends Controller
      * Returns response with client in JSON after detach tag
      *
      * @param $id
-     * @param Request $request
+     * @param $tag_id
      * @return Response|JsonResponse
      */
-    public function detachTag($id, Request $request): Response|JsonResponse
+    public function detachTag($id, $tag_id): Response|JsonResponse
     {
         $client = Client::getClientByID($id);
         if ($client == null) {
             return $this->sendNotFound('messages.clientDoesntExistsError');
         }
 
-        $params = $request->validate([
-            'tag_id' => ['required', 'numeric']
-        ]);
-
-        if(Tag::getTagByID($params['tag_id']) != null) {
-            $client->tags()->detach($params['tag_id']);
+        if(Tag::getTagByID($tag_id) != null) {
+            $client->tags()->detach($tag_id);
         }
         else {
             return $this->sendNotFound('messages.tagDoesntExistError');
         }
 
         return $this->sendData(['Client' => Client::getClientWithAllByID($id)]);
+    }
+
+    /**
+     * Returns response with clients by tag in JSON
+     *
+     * @param $tag
+     * @return JsonResponse
+     */
+    public function searchByTag($tag): JsonResponse
+    {
+        $tag = Tag::getTagByName($tag);
+        if($tag == null) {
+            return $this->sendData([]);
+        }
+
+        return $this->sendData($tag->clients);
+    }
+
+    /**
+     * Returns response with url to file with exported data in JSON
+     *
+     * @param $id
+     * @return Response|JsonResponse
+     */
+    public function exportData($id): Response|JsonResponse
+    {
+        $client = Client::getClientByID($id);
+        if ($client == null) {
+            return $this->sendNotFound('messages.clientDoesntExistsError');
+        }
+
+        if(Storage::exists('clients/' . $client->id . '/Export_client_' . $client->id . '_personal_info.csv')) {
+            Storage::delete('clients/' . $client->id . '/Export_client_' . $client->id . '_personal_info.csv');
+        }
+        $export = "First name,Last name,Date born,Sex,Personal information number,Insurance company,Height,Weight,Phone,Contact email,Street,city,Postal code,Sport,Past illnesses,Injuries suffered,Anamnesis
+$client->first_name,$client->last_name,$client->date_born,$client->sex,$client->personal_information_number,$client->insurance_company,$client->height,$client->weight,$client->phone,$client->contact_email,$client->street,$client->city,$client->postal_code,$client->sport,$client->past_illnesses,$client->injuries_suffered,$client->anamnesis";
+        Storage::put('clients/' . $client->id . '/Export_client_' . $client->id . '_personal_info.csv', $export);
+
+        return $this->sendData(['url' => 'export/' . $client->id . '/Export_client_' . $client->id . '_personal_info.csv']);
+    }
+
+    /**
+     * Returns file by client_id and filename
+     *
+     * @param $id
+     * @param $filename
+     * @return Response|StreamedResponse
+     */
+    public function downloadExport($id, $filename): Response|StreamedResponse
+    {
+        if(Storage::exists('clients/' . $id . '/' . $filename)) {
+            return Storage::download('clients/' . $id . '/' . $filename);
+        }
+
+        return $this->sendNotFound('messages.fileDoesntExistError');
     }
 
     /**
