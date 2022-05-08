@@ -16,7 +16,7 @@ class ExerciseTest extends TestCase
 {
     use CreatesApplication, DatabaseMigrations, WithoutMiddleware;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         Artisan::call('db:seed');
