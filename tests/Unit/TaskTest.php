@@ -75,7 +75,7 @@ class TaskTest extends TestCase
 
         $this->get('/api/task/'.$task->id)->
         assertStatus(404)->
-        assertJson(fn (AssertableJson $json) => $json->has('message'));;
+        assertJson(fn (AssertableJson $json) => $json->has('message'));
     }
 
     public function test_change_status()
